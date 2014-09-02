@@ -14,7 +14,7 @@ export PATH=$PATH:$GOPATH/bin
 
 记得 ``source .zshrc``！
 
-## Step 2: configuration
+## Step 2: install & configuration
 
 ```
 brew install go
