@@ -6,47 +6,34 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-type Version struct {
-	Code        string
-	Name        string
-	Tag         string
-	Commit_hash string
+type App struct {
+	ObjectId  bson.ObjectId "_id"
+	Name      string
+	Platforms []string
 }
 
-type Channel struct {
-	Code string
-	Name string
-}
+var appCollection = mongodb.Mdb.C("app")
 
-func Init() {
-}
-
-func ListVersion(platform string) ([]Version, error) {
-	var result []Version
-	versionCollection := mongodb.Mdb.C(platform + "_version")
-	versionCollection.Find(bson.M{}).All(&result)
+func ListApp() ([]App, error) {
+	var result []App
+	appCollection.Find(bson.M{}).All(&result)
 	return result, nil
 }
 
-func SaveVersion(platform string, version *Version) error {
-	versionCollection := mongodb.Mdb.C(platform + "_version")
-	err := versionCollection.Insert(version)
-	return err
+func CreateApp(app *App) error {
+	return appCollection.Insert(app)
 }
 
-func ListChannels() ([]Channel, error) {
-	var result []Channel
-	channelCollection := mongodb.Mdb.C("channel")
-	channelCollection.Find(bson.M{}).All(&result)
-	return result, nil
+func ReadApp(id int) (App, error) {
+	var result App
+	err := appCollection.Find(bson.M{"_id", id}).One(&result)
+	return result, err
 }
 
-func SaveChannel(channel *Channel) error {
-	fmt.Println(channel)
-	channelCollection := mongodb.Mdb.C("channel")
-	err := channelCollection.Insert(channel)
-	if err != nil {
-		fmt.Println(err)
-	}
-	return err
+func UpdateApp(app *App) error {
+	return appCollection.Update(bson.M{"_id": app.ObjectId}, app)
+}
+
+func DeleteApp(id int) error {
+	return appCpllection.Remove(bson.M{"_id": id})
 }

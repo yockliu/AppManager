@@ -10,39 +10,31 @@ import (
 	"os/exec"
 )
 
-type AppBuilder struct {
-	cmd *exec.Cmd
+func RouteApi(m *martini.ClassicMartini) {
+	m.Group("/api/appbuild", func(r martini.Router) {
+		r.Get("/channel/list", api_channel_list)
+		r.Get("/channel/:id", api_channel_get)
+		r.Post("/channel/add", api_channel_post)
+		r.Put("/channel/:id", api_channel_put)
+		r.Delete("channel/:id", api_channel_delete)
+
+		r.Get("/version/list", api_version_list)
+		r.Get("/version/:id", api_version_get)
+		r.Post("/version/add", api_version_post)
+		r.Put("/version/:id", api_version_put)
+		r.Delete("/version/:id", api_version_delete)
+	})
 }
 
-func (ab *AppBuilder) Run1() {
-	stdout, err := ab.cmd.StdoutPipe()
-	if err != nil {
-		fmt.Println("Error: %s\n", err)
-		return
-	}
-	if err := ab.cmd.Start(); err != nil {
-		fmt.Println("Error: %s\n", err)
-		return
-	}
-	d, _ := ioutil.ReadAll(stdout)
-	if err := ab.cmd.Wait(); err != nil {
-		fmt.Println("Error: %s\n", err)
-		return
-	}
-	fmt.Println(string(d))
-}
-
-func (ab *AppBuilder) Run2() {
-	ab.cmd.Stdout = os.Stdout
-	ab.cmd.Stderr = os.Stderr
-	ab.cmd.Run()
-}
-
-func NewAppBuilder() AppBuilder {
-	fmt.Println("RunBuild")
-	cmd := exec.Command("/bin/sh", "-c", "cd /Users/yinxiaoliu/android/zhoumo_android/\n./gradlew tasks")
-	ab := AppBuilder{cmd}
-	return ab
+func RoutePage(m *martini.ClassicMartini) {
+	m.Group("/appbuild", func(r martini.Router) {
+		r.Get("", page_index)
+		r.Get("/channel/list", page_channel_list)
+		r.Get("/version/add", page_version_add)
+		r.Get("/channel/add", page_channel_add)
+		r.Post("/version/add", version_add)
+		r.Post("/channel/add/submit", binding.Bind(ChannelAddForm{}), channel_add)
+	})
 }
 
 func page_index(r render.Render) {
@@ -79,22 +71,42 @@ func channel_add(caForm ChannelAddForm, r render.Render) {
 	return
 }
 
-func api_channel_add(r render.Render) {
-	//	r.JSON()
-}
-
 type ChannelAddForm struct {
 	Name string `form:"channel_name" binding:"required"`
 	Code string `form:"channel_code" binding:"required"`
 }
 
-func Route(m *martini.ClassicMartini) {
-	m.Group("/appbuild", func(r martini.Router) {
-		r.Get("", page_index)
-		r.Get("/channel/list", page_channel_list)
-		r.Get("/version/add", page_version_add)
-		r.Get("/channel/add", page_channel_add)
-		r.Post("/version/add", version_add)
-		r.Post("/channel/add/submit", binding.Bind(ChannelAddForm{}), channel_add)
-	})
+type AppBuilder struct {
+	cmd *exec.Cmd
+}
+
+func (ab *AppBuilder) Run1() {
+	stdout, err := ab.cmd.StdoutPipe()
+	if err != nil {
+		fmt.Println("Error: %s\n", err)
+		return
+	}
+	if err := ab.cmd.Start(); err != nil {
+		fmt.Println("Error: %s\n", err)
+		return
+	}
+	d, _ := ioutil.ReadAll(stdout)
+	if err := ab.cmd.Wait(); err != nil {
+		fmt.Println("Error: %s\n", err)
+		return
+	}
+	fmt.Println(string(d))
+}
+
+func (ab *AppBuilder) Run2() {
+	ab.cmd.Stdout = os.Stdout
+	ab.cmd.Stderr = os.Stderr
+	ab.cmd.Run()
+}
+
+func NewAppBuilder() AppBuilder {
+	fmt.Println("RunBuild")
+	cmd := exec.Command("/bin/sh", "-c", "cd /Users/yinxiaoliu/android/zhoumo_android/\n./gradlew tasks")
+	ab := AppBuilder{cmd}
+	return ab
 }
