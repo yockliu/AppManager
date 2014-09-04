@@ -1,20 +1,20 @@
-package appbuild
+package appmanager
 
 import (
 	"../mongodb"
-	"fmt"
+	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
 
 type Version struct {
-	ObjectId    bson.ObjectId "_id"
+	Id          bson.ObjectId "_id,omitempty"
 	Code        string
 	Name        string
 	Tag         string
 	CommitIndex string
 }
 
-func versionCollection(app string, platform string) *Collection {
+func versionCollection(app string, platform string) *mgo.Collection {
 	return mongodb.Mdb.C("version_" + app + "_" + platform)
 }
 
@@ -36,9 +36,9 @@ func ReadVersion(app string, platform string, id int) (Version, error) {
 }
 
 func UpdateVersion(app string, platform string, version Version) error {
-	return versionCollection(app, platform).Update(bson.M{"_id", version.ObjectId}, version)
+	return versionCollection(app, platform).Update(bson.M{"_id": version.Id}, version)
 }
 
-func DeleteVersion(app string, platfrom string, id int) error {
+func DeleteVersion(app string, platform string, id int) error {
 	return versionCollection(app, platform).RemoveId(id)
 }
