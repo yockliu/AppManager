@@ -4,10 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/go-martini/martini"
-	//"io/ioutil"
 	"github.com/martini-contrib/binding"
 	"github.com/martini-contrib/render"
-	"net/http"
 	"strconv"
 )
 
@@ -69,17 +67,7 @@ func api_app_get(params martini.Params, r render.Render) {
 	r.JSON(200, string(jsonbyte))
 }
 
-func api_app_post(app App, params martini.Params, req *http.Request, r render.Render) {
-	//	body, err := ioutil.ReadAll(req.Body)
-	//	if err != nil {
-	//		panic(err)
-	//	}
-	//	fmt.Println(string(body))
-	//	var app App
-	//	err = json.Unmarshal(body, &app)
-	//	if err != nil {
-	//		fmt.Println(err)
-	//	}
+func api_app_post(app App, r render.Render) {
 	fmt.Println(app)
 	err := CreateApp(&app)
 	if err != nil {
