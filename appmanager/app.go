@@ -28,16 +28,16 @@ func CreateApp(app *App) error {
 	return appCollection.Insert(app)
 }
 
-func ReadApp(id int) (App, error) {
+func ReadApp(id bson.ObjectId) (App, error) {
 	var result App
 	err := appCollection.Find(bson.M{"_id": id}).One(&result)
 	return result, err
 }
 
-func UpdateApp(app *App) error {
-	return appCollection.Update(bson.M{"_id": app.Id}, app)
+func UpdateApp(id bson.ObjectId, app *App) error {
+	return appCollection.Update(bson.M{"_id": id}, app)
 }
 
-func DeleteApp(id int) error {
+func DeleteApp(id bson.ObjectId) error {
 	return appCollection.Remove(bson.M{"_id": id})
 }

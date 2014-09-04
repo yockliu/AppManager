@@ -6,7 +6,7 @@ import (
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/binding"
 	"github.com/martini-contrib/render"
-	"strconv"
+	"gopkg.in/mgo.v2/bson"
 )
 
 func RouteApi(m *martini.ClassicMartini) {
@@ -14,8 +14,7 @@ func RouteApi(m *martini.ClassicMartini) {
 		r.Get("/app/list", api_app_list)
 		r.Get("/app/:id", api_app_get)
 		r.Post("/app/add", binding.Json(App{}), api_app_post)
-		//r.Post("/app/add", api_app_post)
-		r.Put("/app/:id", api_app_put)
+		r.Put("/app/:id", binding.Json(App{}), api_app_put)
 		r.Delete("/app/:id", api_app_delete)
 
 		//		r.Get("/app/:appid/:platform/channel/list", api_channel_list)
@@ -51,12 +50,8 @@ func api_app_list(r render.Render) {
 }
 
 func api_app_get(params martini.Params, r render.Render) {
-	idstr := params["id"]
-	id, err := strconv.Atoi(idstr)
-	if err != nil {
-		panic(err)
-	}
-	app, err := ReadApp(id)
+	id := params["id"]
+	app, err := ReadApp(bson.ObjectIdHex(id))
 	if err != nil {
 		panic(err)
 	}
@@ -71,14 +66,23 @@ func api_app_post(app App, r render.Render) {
 	fmt.Println(app)
 	err := CreateApp(&app)
 	if err != nil {
-		fmt.Println(err)
+		panic(err)
 	}
 }
 
-func api_app_put(params martini.Params, r render.Render) {
-
+func api_app_put(app App, params martini.Params, r render.Render) {
+	fmt.Println(app)
+	id := params["id"]
+	err := UpdateApp(bson.ObjectIdHex(id), &app)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func api_app_delete(params martini.Params, r render.Render) {
-
+	id := params["id"]
+	err := DeleteApp(bson.ObjectIdHex(id))
+	if err != nil {
+		panic(err)
+	}
 }

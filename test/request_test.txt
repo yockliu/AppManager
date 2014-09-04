@@ -2,10 +2,26 @@ curl -X GET \
 	-H "Authorization: Basic YWRtaW46Z3Vlc3NtZQ==" \
 	http://localhost:3000/api/appmanager/app/list
 
+curl -X GET \
+	-H "Authorization: Basic YWRtaW46Z3Vlc3NtZQ==" \
+	http://localhost:3000/api/appmanager/app/5408415b2a936f110737225b
+
 curl -X POST \
 	-H "Authorization: Basic YWRtaW46Z3Vlc3NtZQ==" \
 	-d '{
-			"name": "abc",
+			"name": "周末去哪儿",
 			"platforms": ["android"]
 		}' \
 	http://localhost:3000/api/appmanager/app/add
+
+curl -X PUT \
+	-H "Authorization: Basic YWRtaW46Z3Vlc3NtZQ==" \
+	-d '{
+			"name": "123",
+			"platforms": ["android"]
+		}' \
+	http://localhost:3000/api/appmanager/app/5408415b2a936f110737225b
+
+curl -X DELETE \
+	-H "Authorization: Basic YWRtaW46Z3Vlc3NtZQ==" \
+	http://localhost:3000/api/appmanager/app/5408415b2a936f110737225b
