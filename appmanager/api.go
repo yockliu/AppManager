@@ -10,10 +10,10 @@ import (
 )
 
 func RouteApi(m *martini.ClassicMartini) {
-	m.Group("/api/appmanager", func(r martini.Router) {
-		r.Get("/app/list", api_app_list)
+	m.Group("/api", func(r martini.Router) {
+		r.Get("/app", api_app_list)
+		r.Post("/app", binding.Json(App{}), api_app_post)
 		r.Get("/app/:id", api_app_get)
-		r.Post("/app/add", binding.Json(App{}), api_app_post)
 		r.Put("/app/:id", binding.Json(App{}), api_app_put)
 		r.Delete("/app/:id", api_app_delete)
 
@@ -39,6 +39,9 @@ func api_app_list(r render.Render) {
 	if err != nil {
 		fmt.Println(err)
 		panic(err)
+	}
+	if apps == nil || len(apps) == 0 {
+		r.JSON(200, "[]")
 	}
 	jsonbyte, err := json.Marshal(apps)
 	if err != nil {
@@ -68,6 +71,7 @@ func api_app_post(app App, r render.Render) {
 	if err != nil {
 		panic(err)
 	}
+	r.JSON(201, nil)
 }
 
 func api_app_put(app App, params martini.Params, r render.Render) {
@@ -77,6 +81,7 @@ func api_app_put(app App, params martini.Params, r render.Render) {
 	if err != nil {
 		panic(err)
 	}
+	r.JSON(201, nil)
 }
 
 func api_app_delete(params martini.Params, r render.Render) {
@@ -85,4 +90,5 @@ func api_app_delete(params martini.Params, r render.Render) {
 	if err != nil {
 		panic(err)
 	}
+	r.JSON(204, nil)
 }

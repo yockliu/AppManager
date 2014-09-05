@@ -7,9 +7,9 @@ import (
 )
 
 type App struct {
-	Id        bson.ObjectId "_id,omitempty"
-	Name      string        "name"
-	Platforms []string      "platforms"
+	Id        bson.ObjectId `json:"id"        bson:"_id,omitempty"`
+	Name      string        `json:"name"      bson:"name"`
+	Platforms []string      `json:"platforms" bson:"platforms"`
 }
 
 var appCollection *mgo.Collection
