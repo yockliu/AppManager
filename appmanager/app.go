@@ -4,12 +4,15 @@ import (
 	"../mongodb"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
+	"time"
 )
 
 type App struct {
 	Id        bson.ObjectId `json:"id"        bson:"_id,omitempty"`
 	Name      string        `json:"name"      bson:"name"`
 	Platforms []string      `json:"platforms" bson:"platforms"`
+	Created   time.Time     `json:"created"   bson:"created"`
+	Updated   time.Time     `json:"updated"   bson:"updated,omitempty"`
 }
 
 var appCollection *mgo.Collection
@@ -25,6 +28,7 @@ func ListApp() ([]App, error) {
 }
 
 func CreateApp(app *App) error {
+	app.Created = time.Now()
 	return appCollection.Insert(app)
 }
 
@@ -35,6 +39,7 @@ func ReadApp(id bson.ObjectId) (App, error) {
 }
 
 func UpdateApp(id bson.ObjectId, app *App) error {
+	app.Update = time.Now()
 	return appCollection.Update(bson.M{"_id": id}, app)
 }
 

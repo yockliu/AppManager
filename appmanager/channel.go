@@ -4,16 +4,28 @@ import (
 	"../mongodb"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
+	"time"
 )
 
 type Channel struct {
-	Id   bson.ObjectId "_id,omitempty"
-	Code string
-	Name string
+	Id      bson.ObjectId `json:"id"        bson:"_id,omitempty"`
+	Code    string        `json:"code"      bson:"code"`
+	Name    string        `json:"name"      bson:"name"`
+	Created time.Time     `json:"created"   bson:"created"`
+	Updated time.Time     `json:"updated"   bson:"updated,omitempty"`
 }
 
+var cMap map[string]*mgo.Collection
+
 func channelCollection(app string, platform string) *mgo.Collection {
-	return mongodb.Mdb.C("channel_" + app + "_" + platform)
+	if cMap == nil {
+		cMap = make(map[string]*mgo.Collection)
+	}
+	cName := "channel_" + app + "_" + platform
+	if cMap[cName] == nil {
+		cMap[cName] = mongodb.Mdb.C(cName)
+	}
+	return cMap[cName]
 }
 
 func ListChannels(app string, platform string) ([]Channel, error) {

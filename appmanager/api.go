@@ -37,7 +37,6 @@ func api_app_list(r render.Render) {
 	var err error
 	apps, err = ListApp()
 	if err != nil {
-		fmt.Println(err)
 		panic(err)
 	}
 	if apps == nil || len(apps) == 0 {
@@ -45,10 +44,8 @@ func api_app_list(r render.Render) {
 	}
 	jsonbyte, err := json.Marshal(apps)
 	if err != nil {
-		fmt.Println(err)
 		panic(err)
 	}
-	fmt.Println("----")
 	r.JSON(200, string(jsonbyte))
 }
 
