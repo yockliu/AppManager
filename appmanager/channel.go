@@ -15,17 +15,17 @@ type Channel struct {
 	Updated time.Time     `json:"updated"   bson:"updated,omitempty"`
 }
 
-var cMap map[string]*mgo.Collection
+var channelCollectionMap map[string]*mgo.Collection
 
 func channelCollection(app string, platform string) *mgo.Collection {
-	if cMap == nil {
-		cMap = make(map[string]*mgo.Collection)
+	if channelCollectionMap == nil {
+		channelCollectionMap = make(map[string]*mgo.Collection)
 	}
 	cName := "channel_" + app + "_" + platform
-	if cMap[cName] == nil {
-		cMap[cName] = mongodb.Mdb.C(cName)
+	if channelCollectionMap[cName] == nil {
+		channelCollectionMap[cName] = mongodb.Mdb.C(cName)
 	}
-	return cMap[cName]
+	return channelCollectionMap[cName]
 }
 
 func ListChannels(app string, platform string) ([]Channel, error) {

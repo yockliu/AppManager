@@ -26,7 +26,7 @@ func RoutePage(m *martini.ClassicMartini) {
 }
 
 func page_index(r render.Render) {
-	r.HTML(200, "appbuild/index", "AppBuild")
+	r.HTML(200, "appmanager/index", "AppBuild")
 }
 
 func page_channel_list(r render.Render) {
@@ -34,12 +34,12 @@ func page_channel_list(r render.Render) {
 	//	if err != nil {
 	//	} else {
 	//		fmt.Println(channels)
-	//		r.HTML(200, "appbuild/channel_list", channels)
+	//		r.HTML(200, "appmanager/channel_list", channels)
 	//	}
 }
 
 func page_version_add(r render.Render) {
-	r.HTML(200, "appbuild/version_add", "")
+	r.HTML(200, "appmanager/version_add", "")
 }
 
 func version_add(r render.Render) {
@@ -47,7 +47,7 @@ func version_add(r render.Render) {
 }
 
 func page_channel_add(r render.Render) {
-	r.HTML(200, "appbuild/channel_add", "")
+	r.HTML(200, "appmanager/channel_add", "")
 }
 
 func channel_add(caForm ChannelAddForm, r render.Render) {
@@ -55,7 +55,7 @@ func channel_add(caForm ChannelAddForm, r render.Render) {
 	//ch := Channel{caForm.Code, caForm.Name}
 	//fmt.Println(ch)
 	//SaveChannel(&ch)
-	r.Redirect("/appbuild/channel/list")
+	r.Redirect("/appmanager/channel/list")
 	return
 }
 

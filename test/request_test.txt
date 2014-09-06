@@ -9,7 +9,7 @@ curl -X GET \
 curl -X POST \
 	-H "Authorization: Basic YWRtaW46Z3Vlc3NtZQ==" \
 	-d '{
-			"name": "周末abc",
+			"name": "周末去哪儿",
 			"platforms": ["android"]
 		}' \
 	http://localhost:3000/api/app
@@ -17,11 +17,10 @@ curl -X POST \
 curl -X PUT \
 	-H "Authorization: Basic YWRtaW46Z3Vlc3NtZQ==" \
 	-d '{
-			"name": "123",
 			"platforms": ["android"]
 		}' \
-	http://localhost:3000/api/app/5408415b2a936f110737225b
+	http://localhost:3000/api/app/540b2b792a936f1107372264
 
 curl -X DELETE \
 	-H "Authorization: Basic YWRtaW46Z3Vlc3NtZQ==" \
-	http://localhost:3000/api/app/5408415b2a936f110737225b
+	http://localhost:3000/api/app/540b22d32a936f1107372263

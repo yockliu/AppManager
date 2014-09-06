@@ -17,17 +17,17 @@ type Version struct {
 	Updated  time.Time     `json:"updated"   bson:"updated,omitempty"`
 }
 
-var cMap map[string]*mgo.Collection
+var versionCollectionMap map[string]*mgo.Collection
 
 func versionCollection(appid string, platform string) *mgo.Collection {
-	if cMap == nil {
-		cMap = make(map[string]*mgo.Collection)
+	if versionCollectionMap == nil {
+		versionCollectionMap = make(map[string]*mgo.Collection)
 	}
-	cName = "version_" + appid + "_" + platform
-	if cMap[cName] == nil {
-		cMap[cName] = mongodb.Mdb.C(cName)
+	cName := "version_" + appid + "_" + platform
+	if versionCollectionMap[cName] == nil {
+		versionCollectionMap[cName] = mongodb.Mdb.C(cName)
 	}
-	return cMap[cName]
+	return versionCollectionMap[cName]
 }
 
 func ListVersion(appid string, platform string) ([]Version, error) {
