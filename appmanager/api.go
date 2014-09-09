@@ -44,12 +44,7 @@ func api_app_list(r render.Render) {
 		if apps == nil || len(apps) == 0 {
 			r.JSON(200, "[]")
 		} else {
-			jsonbyte, err := json.Marshal(apps)
-			if err != nil {
-				r.JSON(500, err.Error())
-			} else {
-				r.JSON(200, string(jsonbyte))
-			}
+			r.JSON(200, apps)
 		}
 	}
 }

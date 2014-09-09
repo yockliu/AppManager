@@ -1,8 +1,10 @@
 #Api说明
 
-Created by: Yock.L
-
-Created at: 2014.9.5
+>Created by: Yock.L
+>
+>Created at: 2014.9.5
+>
+>Updated at: 2014.9.9
 
 ---
 
@@ -50,13 +52,15 @@ Created at: 2014.9.5
 - 200 OK - [GET]：服务器成功返回用户请求的数据，该操作是幂等的（Idempotent）。
 - 201 CREATED - [POST/PUT/PATCH]：用户新建或修改数据成功。
 - 204 NO CONTENT - [DELETE]：用户删除数据成功。
-- 400 INVALID REQUEST - [POST/PUT/PATCH]：用户发出的请求有错误，服务器没有进行新建或修改数据的操作，该操作是幂等的。。
+- 400 INVALID REQUEST - [POST/PUT/PATCH]：用户发出的请求有错误，服务器没有进行新建或修改数据的操作，该操作是幂等的。
 - 404 NOT FOUND - [*]：用户发出的请求针对的是不存在的记录，服务器没有进行操作，该操作是幂等的。
 - 500 INTERNAL SERVER ERROR - [*]：服务器发生错误，用户将无法判断发出的请求是否成功。
 ```
 ####json
 
-如果有内容返回，则使用json格式返回。
+- GET 返回GET的数据（如果是列表且列表没有数据，则返回"[]"）
+- POST, PUT 返回创建或修改后的数据
+- DELETE 不返回内容
 
 ---
 
@@ -65,9 +69,13 @@ Created at: 2014.9.5
 ####go struct
 ```
 type App struct {
-    Id        bson.ObjectId `json:"id"        bson:"_id,omitempty"`
-    Name      string        `json:"name"      bson:"name"`
-    Platforms []string      `json:"platforms" bson:"platforms"`
+	Id        bson.ObjectId `json:"id"        bson:"_id,omitempty"`
+	Name      string        `json:"name"      bson:"name"`
+	Platforms []string      `json:"platforms" bson:"platforms"`
+	Created   time.Time     `json:"created"   bson:"created"`
+	Updated   time.Time     `json:"updated"   bson:"updated,omitempty"`
+	Forbidden bool          `json:"forbidden" bson:"forbidden"`
+	Validate  bool          `json:"validate"  bson:"validate"`
 }
 ```
 
@@ -76,17 +84,18 @@ type App struct {
 {
 	"id":			"$id",
 	"name":			"$name",
-	"platforms": 	["$p1", "$p2"],
+	"platforms": 	["android", "ios"],
+	"Validate":		true
 }
 ```
 
 ####apis
 
-* [Get App List](anchor-get_app_list)
-* [Get App](anchor-get_app)
-* [Post App (create)](anchor-post_app)
-* [Put App (set)](anchor-put_app)
-* [Delete App](anchor-delete_app)
+* [Get App List](#anchor-get_app_list)
+* [Get App](#anchor-get_app)
+* [Post App (create)](#anchor-post_app)
+* [Put App (set)](#anchor-put_app)
+* [Delete App](#anchor-delete_app)
 
 
 ###<a name="anchor-get_app_list" id="anchor-get_app_list">Get App List</a>
@@ -125,7 +134,7 @@ curl -X GET \
 ```
 status: 200
 body:
-[{\"id\":\"540843152a936f110737225c\",\"name\":\"abc\",\"platforms\":[\"android\"]},{\"id\":\"540849ad2a936f110737225d\",\"name\":\"周末去哪儿\",\"platforms\":[\"android\"]},{\"id\":\"540924cd2a936f110737225e\",\"name\":\"周末\",\"platforms\":[\"android\"]},{\"id\":\"540925a82a936f110737225f\",\"name\":\"周末1\",\"platforms\":[\"android\"]},{\"id\":\"540925ec2a936f1107372260\",\"name\":\"周末2\",\"platforms\":[\"android\"]},{\"id\":\"540926312a936f1107372261\",\"name\":\"周末3\",\"platforms\":[\"android\"]}]
+[{"id":"540843152a936f110737225c","name":"周末去哪儿","platforms":["android","ios"]}]
 ```
 
 ###<a name="anchor-get_app" id="anchor-get_app">Get App</a>
@@ -145,8 +154,7 @@ body:
 ####response
 
 	status: 200
-	body:
-		 {app json}
+	body: {app json}
 
 ####示例
 
@@ -163,7 +171,7 @@ curl -X GET \
 ```
 status: 200
 body:
-{\"id\":\"540849ad2a936f110737225d\",\"name\":\"周末去哪儿\",\"platforms\":[\"android\"]}
+{"id":"540849ad2a936f110737225d","name":"周末去哪儿","platforms":["android"]}
 ```
 
 ###<a name="anchor-post_app" id="anchor-post_app">Post App</a>
@@ -186,6 +194,7 @@ body:
 ####response
 
 	status: 201
+	body: {app json}
 
 ####示例
 
@@ -205,8 +214,7 @@ curl -X POST \
 
 ```
 status: 201
-body:
-	null
+body: {"name": "周末","platforms":["android"]}
 ```
 
 ###<a name="anchor-put_app" id="anchor-put_app">Put App</a>
@@ -229,6 +237,7 @@ body:
 ####response
 
 	status: 201
+	body: {app json}
 
 ####示例
 
@@ -248,14 +257,15 @@ curl -X PUT \
 
 ```
 status: 201
-body:
-	null
+body: {"name": "周末","platforms":["android"]}
 ```
 
 ###<a name="anchor-delete_app" id="anchor-delete_app">Delete App</a>
 
 ####功能
 删除App
+
+`App的删除实际没有真正删除记录，只是把validate置成了false`
 
 ####request
 
@@ -283,12 +293,460 @@ curl -X DELETE \
 
 ```
 status: 204
-body:
-	null
 ```
 
 ##Version
-待添加
+
+####go struct
+```
+type Version struct {
+	Id       bson.ObjectId `json:"id"        bson:"_id,omitempty"`
+	Code     string        `json:"code"      bson:"code"`
+	Name     string        `json:"name"      bson:"name"`
+	Platform string        `json:"platform"  bson:"platform"`	GitTag   string        `json:"git_tag"   bson:"git_tag,omitempty"`
+	GitIndex string        `json:"git_index" bson:"git_index,omitempty"`
+ 	Created  time.Time     `json:"created"   bson:"created"`
+	Updated  time.Time     `json:"updated"   bson:"updated,omitempty"`
+}
+```
+
+####json
+```
+{
+	"id":			"$id",
+	"code":			"$code"
+	"name":			"$name",
+	"platforms": 	"android",
+}
+```
+
+####apis
+
+* [Get Version List](#anchor-get_version_list)
+* [Get Version](#anchor-get_version)
+* [Post Version (create)](#anchor-post_version)
+* [Put Version (set)](#anchor-put_version)
+* [Delete Version](#anchor-delete_version)
+
+
+###<a name="anchor-get_version_list" id="anchor-get_version_list">Get Version List</a>
+
+####功能
+获得Version列表
+
+####request
+
+#####Method
+**_Get_**
+
+#####Path
+**_/api/app/:appid/version_**
+
+
+####response
+	
+	status: 200
+	body:
+		[{version json 1},{version json 2},...]
+		[] // 为空的情况
+
+####示例
+
+请求
+
+```
+curl -X GET \
+	-H "Authorization: Basic YWRtaW46Z3Vlc3NtZQ==" \
+	http://localhost:3000/api/app/:appid/version
+```
+
+返回
+
+```
+status: 200
+body:
+[{"id":"540843152a936f110737225c","code":"1","name":"0.0.1","platforms":"android"}]
+```
+
+###<a name="anchor-get_version" id="anchor-get_version">Get Version</a>
+
+####功能
+获得Version详情
+
+####request
+
+#####Method
+**_GET_**
+
+#####Path
+**_/api/app/:appid/version/:id_**
+
+
+####response
+
+	status: 200
+	body: {version json}
+
+####示例
+
+请求
+
+```
+curl -X GET \
+	-H "Authorization: Basic YWRtaW46Z3Vlc3NtZQ==" \
+	http://localhost:3000/api/app/:appid/version/:id
+```
+
+返回
+
+
+###<a name="anchor-post_version" id="anchor-post_version">Post Version</a>
+
+####功能
+创建Version
+
+####request
+
+#####Method
+**_POST_**
+
+#####Path
+**_/api/app/:appid/version_**
+
+#####Body
+
+**_{version json}_**
+
+####response
+
+	status: 201
+	body: {version json}
+
+####示例
+
+请求
+
+```
+curl -X POST \
+	-H "Authorization: Basic YWRtaW46Z3Vlc3NtZQ==" \
+	-d '{
+			"code": "1"
+			"name": "0.0.1",
+			"platforms": "android"
+		}' \
+	http://localhost:3000/api/app/:appid/version
+```
+
+返回
+
+```
+status: 201
+body: {"id": "...","code": "1","name": "0.0.1","platforms":"android"}
+```
+
+###<a name="anchor-put_version" id="anchor-put_version">Put Version</a>
+
+####功能
+更新Version
+
+####request
+
+#####Method
+**_PUT_**
+
+#####Path
+**_/api/app/:appid/version/:id_**
+
+#####Body
+
+**_{version json}_**
+
+####response
+
+	status: 201
+	body: {version json}
+
+####示例
+
+请求
+
+```
+curl -X PUT \
+	-H "Authorization: Basic YWRtaW46Z3Vlc3NtZQ==" \
+	-d '{
+			"code": "1"
+			"name": "0.0.1",
+			"platforms": "android"
+		}' \
+	http://localhost:3000/api/app/:appid/version/:id
+```
+
+返回
+
+```
+status: 201
+body: {"code": "1","name": "0.0.1","platforms":"android"}
+```
+
+###<a name="anchor-delete_version" id="anchor-delete_version">Delete Version</a>
+
+####功能
+删除Version
+
+####request
+
+#####Method
+**_DELETE_**
+
+#####Path
+**_/api/app/:appid/version/:id_**
+
+####response
+
+	status: 204
+
+####示例
+
+请求
+
+```
+curl -X DELETE \
+	-H "Authorization: Basic YWRtaW46Z3Vlc3NtZQ==" \
+	http://localhost:3000/api/app/:appid/version/:id
+```
+
+返回
+
+```
+status: 204
+```
 
 ##Channel
-待添加
+
+####go struct
+```
+type Channel struct {
+	Id        bson.ObjectId `json:"id"        bson:"_id,omitempty"`
+	Code      string        `json:"code"      bson:"code"`
+	Name      string        `json:"name"      bson:"name"`
+	Platform  string        `json:"platform"  bson:"platform"`
+	Created   time.Time     `json:"created"   bson:"created"`
+	Updated   time.Time     `json:"updated"   bson:"updated,omitempty"`
+}
+```
+
+####json
+```
+{
+	"id":			"$id",
+	"code":			"$code",
+	"name":			"$name",
+	"platforms": 	"android"
+}
+```
+
+####apis
+
+* [Get Channel List](#anchor-get_channel_list)
+* [Get Channel](#anchor-get_channel)
+* [Post Channel (create)](#anchor-post_channel)
+* [Put Channel (set)](#anchor-put_channel)
+* [Delete Channel](#anchor-delete_channel)
+
+
+###<a name="anchor-get_channel_list" id="anchor-get_channel_list">Get Channel List</a>
+
+####功能
+获得Channel列表
+
+####request
+
+#####Method
+**_Get_**
+
+#####Path
+**_/api/app/:appid/channel_**
+
+
+####response
+	
+	status: 200
+	body:
+		[{channel json 1},{channel json 2},...]
+		[] // 为空的情况
+
+####示例
+
+请求
+
+```
+curl -X GET \
+	-H "Authorization: Basic YWRtaW46Z3Vlc3NtZQ==" \
+	http://localhost:3000/api/app/:appid/channel
+```
+
+返回
+
+```
+status: 200
+body:
+[{"id":"540843152a936f110737225c","code":"and-a0","name":"测试","platforms":"android"}]
+```
+
+###<a name="anchor-get_channel" id="anchor-get_channel">Get Channel</a>
+
+####功能
+获得Channel详情
+
+####request
+
+#####Method
+**_GET_**
+
+#####Path
+**_/api/app/:appid/channel/:id_**
+
+
+####response
+
+	status: 200
+	body: {channel json}
+
+####示例
+
+请求
+
+```
+curl -X GET \
+	-H "Authorization: Basic YWRtaW46Z3Vlc3NtZQ==" \
+	http://localhost:3000/api/app/:appid/channel/:id
+```
+
+返回
+
+```
+status: 200
+body:
+{"id":"540849ad2a936f110737225d","code":"and-a0","name":"测试","platforms":"android"}
+```
+
+###<a name="anchor-post_channel" id="anchor-post_channel">Post Channel</a>
+
+####功能
+创建Channel
+
+####request
+
+#####Method
+**_POST_**
+
+#####Path
+**_/api/app/:appid/channel_**
+
+#####Body
+
+**_{channel json}_**
+
+####response
+
+	status: 201
+	body: {channel json}
+
+####示例
+
+请求
+
+```
+curl -X POST \
+	-H "Authorization: Basic YWRtaW46Z3Vlc3NtZQ==" \
+	-d '{
+			"code": "and-a0"
+			"name": "测试",
+			"platforms": "android"
+		}' \
+	http://localhost:3000/api/app/:appid/channel
+```
+
+返回
+
+```
+status: 201
+body: {"id":"540849ad2a936f110737225d","code":"and-a0","name":"测试","platforms":"android"}
+```
+
+###<a name="anchor-put_channel" id="anchor-put_channel">Put Channel</a>
+
+####功能
+更新Channel
+
+####request
+
+#####Method
+**_PUT_**
+
+#####Path
+**_/api/app/:appid/channel/:id_**
+
+#####Body
+
+**_{channel json}_**
+
+####response
+
+	status: 201
+	body: {channel json}
+
+####示例
+
+请求
+
+```
+curl -X PUT \
+	-H "Authorization: Basic YWRtaW46Z3Vlc3NtZQ==" \
+	-d '{
+			"code": "and-a0"
+			"name": "测试",
+			"platforms": "android"
+		}' \
+	http://localhost:3000/api/app/:appid/channel/:id
+```
+
+返回
+
+```
+status: 201
+body: {"id":"540849ad2a936f110737225d","code":"and-a0","name":"测试","platforms":"android"}
+```
+
+###<a name="anchor-delete_channel" id="anchor-delete_channel">Delete Channel</a>
+
+####功能
+删除Channel
+
+####request
+
+#####Method
+**_DELETE_**
+
+#####Path
+**_/api/app/:appid/channel/:id_**
+
+####response
+
+	status: 204
+
+####示例
+
+请求
+
+```
+curl -X DELETE \
+	-H "Authorization: Basic YWRtaW46Z3Vlc3NtZQ==" \
+	http://localhost:3000/api/app/:appid/channel/:id
+```
+
+返回
+
+```
+status: 204
+```
