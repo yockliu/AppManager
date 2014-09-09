@@ -40,22 +40,29 @@ func ListApp() ([]App, error) {
 	return result, nil
 }
 
-func CreateApp(app *App) error {
+func CreateApp(app *App) (App, error) {
+	var newApp App
 	exist := AppExists(bson.M{"name": app.Name, "validate": true})
 	if exist {
-		return errors.New("同名App已存在")
+		return newApp, errors.New("同名App已存在")
 	}
+	newId := bson.NewObjectId()
+	app.Id = newId
 	app.Created = time.Now()
 	app.Forbidden = false
 	app.Validate = true
-	return appCollection.Insert(app)
+	err := appCollection.Insert(app)
+	if err == nil {
+		appCollection.FindId(newId).One(&newApp)
+	}
+	return newApp, err
 }
 
 func ReadApp(id bson.ObjectId) (App, error) {
 	var result App
 	err := appCollection.Find(bson.M{"_id": id}).One(&result)
 
-	if result.Validate == true && err == nil {
+	if result.Validate == false && err == nil {
 		err = errors.New("无效的App")
 	}
 

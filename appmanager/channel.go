@@ -21,7 +21,7 @@ type Channel struct {
 var channelCollectionMap map[string]*mgo.Collection
 
 func channelCollection(appid string) (*mgo.Collection, error) {
-	if !AppExists(bson.M{"id": appid, "validate": true}) {
+	if !AppExists(bson.M{"_id": bson.ObjectIdHex(appid), "validate": true}) {
 		return nil, errors.New("无效的App ID")
 	}
 	if channelCollectionMap == nil {
@@ -53,16 +53,22 @@ func ListChannels(appid string, platform string) ([]Channel, error) {
 	return result, err
 }
 
-func CreateChannel(appid string, channel *Channel) error {
+func CreateChannel(appid string, channel Channel) (Channel, error) {
+	var newChannel Channel
 	channelC, err := channelCollection(appid)
 	if err == nil {
+		newId := bson.NewObjectId()
+		channel.Id = newId
 		channel.Created = time.Now()
 		channelC.Insert(channel)
+		if err == nil {
+			channelC.FindId(newId).One(&newChannel)
+		}
 	}
-	return err
+	return newChannel, err
 }
 
-func ReadChannel(appid string, id int) (Channel, error) {
+func ReadChannel(appid string, id bson.ObjectId) (Channel, error) {
 	var channel Channel
 	channelC, err := channelCollection(appid)
 	if err == nil {
@@ -88,7 +94,7 @@ func UpdateChannel(appid string, id bson.ObjectId, m map[string]interface{}) (Ch
 	return newChannel, err
 }
 
-func DeleteChannel(appid string, id int) error {
+func DeleteChannel(appid string, id bson.ObjectId) error {
 	channelC, err := channelCollection(appid)
 	if err == nil {
 		err = channelC.RemoveId(id)

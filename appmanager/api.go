@@ -59,29 +59,26 @@ func api_app_get(params martini.Params, r render.Render) {
 	app, err := ReadApp(bson.ObjectIdHex(id))
 	if err != nil {
 		r.JSON(500, err.Error())
-	}
-	jsonbyte, err := json.Marshal(app)
-	if err != nil {
-		r.JSON(500, err.Error())
 	} else {
-		r.JSON(200, string(jsonbyte))
+		r.JSON(200, app)
 	}
 }
 
 func api_app_post(app App, r render.Render) {
 	fmt.Println(app)
-	err := CreateApp(&app)
+	newApp, err := CreateApp(&app)
 	if err != nil {
 		r.JSON(500, err.Error())
 	} else {
-		r.JSON(201, "{}")
+		r.JSON(201, newApp)
 	}
 }
 
 func api_app_put(params martini.Params, req *http.Request, r render.Render) {
 	body, err := ioutil.ReadAll(req.Body)
 	if err != nil {
-		panic(err)
+		r.JSON(500, err.Error())
+		return
 	}
 	var m map[string]interface{}
 	json.Unmarshal(body, &m)
@@ -101,39 +98,134 @@ func api_app_delete(params martini.Params, r render.Render) {
 	if err != nil {
 		r.JSON(500, err.Error())
 	} else {
-		r.JSON(204, "{}")
+		r.JSON(204, "")
 	}
 }
 
 func api_version_list(params martini.Params, r render.Render) {
 	appid := params["appid"]
-	versions, err := ListVersion(appid, "")
+	platform := params["platform"]
+	versions, err := ListVersion(appid, platform)
 	if err != nil {
-		r.JSON(500, err)
+		r.JSON(500, err.Error())
+	} else if len(versions) == 0 {
+		r.JSON(200, "[]")
 	} else {
-		jsonbyte, err := json.Marshal(versions)
-		if err != nil {
-			r.JSON(500, err)
-		} else if jsonbyte == nil {
-			r.JSON(500, "[]")
-		} else {
-			r.JSON(200, string(jsonbyte))
-		}
+		r.JSON(200, versions)
 	}
 }
 
-func api_version_post(version Version, r render.Render) {
-
+func api_version_post(version Version, params martini.Params, r render.Render) {
+	appid := params["appid"]
+	newVersion, err := CreateVersion(appid, version)
+	if err != nil {
+		r.JSON(500, err.Error())
+		return
+	}
+	r.JSON(201, newVersion)
 }
+
 func api_version_get(params martini.Params, r render.Render) {
-}
-func api_version_put(params martini.Params, req *http.Request, r render.Render) {
-}
-func api_version_delete(params martini.Params, r render.Render) {
+	appid := params["appid"]
+	id := params["id"]
+	version, err := ReadVersion(appid, bson.ObjectIdHex(id))
+	if err != nil {
+		r.JSON(500, err.Error())
+		return
+	}
+	r.JSON(200, version)
 }
 
-func api_channel_list(params martini.Params, r render.Render)                   {}
-func api_channel_post(version Version, r render.Render)                         {}
-func api_channel_get(params martini.Params, r render.Render)                    {}
-func api_channel_put(params martini.Params, req *http.Request, r render.Render) {}
-func api_channel_delete(params martini.Params, r render.Render)                 {}
+func api_version_put(params martini.Params, req *http.Request, r render.Render) {
+	body, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		r.JSON(500, err.Error())
+		return
+	}
+	var m map[string]interface{}
+	json.Unmarshal(body, &m)
+	fmt.Println(m)
+	appid := params["appid"]
+	id := params["id"]
+	newVersion, err := UpdateVersion(appid, bson.ObjectIdHex(id), m)
+	if err != nil {
+		r.JSON(500, err.Error())
+	} else {
+		r.JSON(201, newVersion)
+	}
+}
+
+func api_version_delete(params martini.Params, r render.Render) {
+	appid := params["appid"]
+	id := params["id"]
+	err := DeleteVersion(appid, bson.ObjectIdHex(id))
+	if err != nil {
+		r.JSON(500, err.Error())
+	} else {
+		r.JSON(204, "")
+	}
+}
+
+func api_channel_list(params martini.Params, r render.Render) {
+	appid := params["appid"]
+	platform := params["platform"]
+	channels, err := ListChannels(appid, platform)
+	if err != nil {
+		r.JSON(500, err.Error())
+	} else if len(channels) == 0 {
+		r.JSON(200, "[]")
+	} else {
+		r.JSON(200, channels)
+	}
+}
+
+func api_channel_post(channel Channel, params martini.Params, r render.Render) {
+	appid := params["appid"]
+	newChannel, err := CreateChannel(appid, channel)
+	if err != nil {
+		r.JSON(500, err.Error())
+	} else {
+		r.JSON(201, newChannel)
+	}
+}
+
+func api_channel_get(params martini.Params, r render.Render) {
+	appid := params["appid"]
+	id := params["id"]
+	channel, err := ReadChannel(appid, bson.ObjectIdHex(id))
+	if err != nil {
+		r.JSON(500, err.Error())
+	} else {
+		r.JSON(200, channel)
+	}
+}
+
+func api_channel_put(params martini.Params, req *http.Request, r render.Render) {
+	body, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		r.JSON(500, err.Error())
+		return
+	}
+	var m map[string]interface{}
+	json.Unmarshal(body, &m)
+	fmt.Println(m)
+	appid := params["appid"]
+	id := params["id"]
+	newChannel, err := UpdateChannel(appid, bson.ObjectIdHex(id), m)
+	if err != nil {
+		r.JSON(500, err.Error())
+	} else {
+		r.JSON(201, newChannel)
+	}
+}
+
+func api_channel_delete(params martini.Params, r render.Render) {
+	appid := params["appid"]
+	id := params["id"]
+	err := DeleteChannel(appid, bson.ObjectIdHex(id))
+	if err != nil {
+		r.JSON(500, err.Error())
+	} else {
+		r.JSON(204, "{}")
+	}
+}

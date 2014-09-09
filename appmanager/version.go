@@ -14,8 +14,8 @@ type Version struct {
 	Code     string        `json:"code"      bson:"code"`
 	Name     string        `json:"name"      bson:"name"`
 	Platform string        `json:"platform"  bson:"platform"`
-	GitTag   string        `json:"git_tag"   bson:"git_tag"`
-	GitIndex string        `json:"git_index" bson:"git_index"`
+	GitTag   string        `json:"git_tag"   bson:"git_tag,omitempty"`
+	GitIndex string        `json:"git_index" bson:"git_index,omitempty"`
 	Created  time.Time     `json:"created"   bson:"created"`
 	Updated  time.Time     `json:"updated"   bson:"updated,omitempty"`
 }
@@ -23,7 +23,7 @@ type Version struct {
 var versionCollectionMap map[string]*mgo.Collection
 
 func versionCollection(appid string) (*mgo.Collection, error) {
-	if !AppExists(bson.M{"id": appid, "validate": true}) {
+	if !AppExists(bson.M{"_id": bson.ObjectIdHex(appid), "validate": true}) {
 		return nil, errors.New("无效的App ID")
 	}
 	if versionCollectionMap == nil {
@@ -55,16 +55,22 @@ func ListVersion(appid string, platform string) ([]Version, error) {
 	return result, err
 }
 
-func CreateVersion(appid string, version *Version) error {
+func CreateVersion(appid string, version Version) (Version, error) {
+	var newVersion Version
 	versionC, err := versionCollection(appid)
 	if err == nil {
+		newId := bson.NewObjectId()
+		version.Id = newId
 		version.Created = time.Now()
 		err = versionC.Insert(version)
+		if err == nil {
+			versionC.FindId(newId).One(&newVersion)
+		}
 	}
-	return err
+	return newVersion, err
 }
 
-func ReadVersion(appid string, id int) (Version, error) {
+func ReadVersion(appid string, id bson.ObjectId) (Version, error) {
 	var result Version
 	versionC, err := versionCollection(appid)
 	if err == nil {
