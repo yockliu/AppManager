@@ -25,6 +25,15 @@ func InitApp() {
 	appCollection = mongodb.Mdb.C("app")
 }
 
+func AppExists(where bson.M) bool {
+	existCount, _ := appCollection.Find(where).Count()
+	if existCount > 0 {
+		return true
+	} else {
+		return false
+	}
+}
+
 func ListApp() ([]App, error) {
 	var result []App
 	appCollection.Find(bson.M{"validate": true}).All(&result)
@@ -32,8 +41,8 @@ func ListApp() ([]App, error) {
 }
 
 func CreateApp(app *App) error {
-	existCount, _ := appCollection.Find(bson.M{"name": app.Name, "validate": true}).Count()
-	if existCount > 0 {
+	exist := AppExists(bson.M{"name": app.Name, "validate": true})
+	if exist {
 		return errors.New("同名App已存在")
 	}
 	app.Created = time.Now()
@@ -55,11 +64,11 @@ func ReadApp(id bson.ObjectId) (App, error) {
 
 func UpdateApp(id bson.ObjectId, m map[string]interface{}) (App, error) {
 	var result App
-	err := appCollection.Find(bson.M{"_id": id, "validate": true}).One(&result)
-	if err != nil {
-		err = errors.New("修改的App不存在或已删除")
-		return result, err
-	}
+	//	err := appCollection.Find(bson.M{"_id": id, "validate": true}).One(&result)
+	//	if err != nil {
+	//		err = errors.New("修改的App不存在或已删除")
+	//		return result, err
+	//	}
 	m["updated"] = time.Now()
 	var change = mgo.Change{
 		ReturnNew: true,

@@ -2,57 +2,96 @@ package appmanager
 
 import (
 	"../mongodb"
+	"errors"
+	"fmt"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"time"
 )
 
 type Channel struct {
-	Id      bson.ObjectId `json:"id"        bson:"_id,omitempty"`
-	Code    string        `json:"code"      bson:"code"`
-	Name    string        `json:"name"      bson:"name"`
-	Created time.Time     `json:"created"   bson:"created"`
-	Updated time.Time     `json:"updated"   bson:"updated,omitempty"`
+	Id       bson.ObjectId `json:"id"        bson:"_id,omitempty"`
+	Code     string        `json:"code"      bson:"code"`
+	Name     string        `json:"name"      bson:"name"`
+	Platform string        `json:"platform"  bson:"platform"`
+	Created  time.Time     `json:"created"   bson:"created"`
+	Updated  time.Time     `json:"updated"   bson:"updated,omitempty"`
 }
 
 var channelCollectionMap map[string]*mgo.Collection
 
-func channelCollection(app string, platform string) *mgo.Collection {
+func channelCollection(appid string) (*mgo.Collection, error) {
+	if !AppExists(bson.M{"id": appid, "validate": true}) {
+		return nil, errors.New("无效的App ID")
+	}
 	if channelCollectionMap == nil {
 		channelCollectionMap = make(map[string]*mgo.Collection)
 	}
-	cName := "channel_" + app + "_" + platform
+	cName := KeyOfChannelCollection(appid)
 	if channelCollectionMap[cName] == nil {
 		channelCollectionMap[cName] = mongodb.Mdb.C(cName)
 	}
-	return channelCollectionMap[cName]
+	return channelCollectionMap[cName], nil
 }
 
-func ListChannels(app string, platform string) ([]Channel, error) {
+func KeyOfChannelCollection(appid string) string {
+	return "channel_" + appid
+}
+
+func ListChannels(appid string, platform string) ([]Channel, error) {
 	var result []Channel
-	channelCollection(app, platform).Find(bson.M{}).All(&result)
-	return result, nil
+	channelC, err := channelCollection(appid)
+	if err == nil {
+		var m bson.M
+		if len(platform) != 0 {
+			m = bson.M{"platform": platform}
+		} else {
+			m = bson.M{}
+		}
+		channelC.Find(m).All(&result)
+	}
+	return result, err
 }
 
-func CreateChannel(app string, platform string, channel *Channel) error {
-	err := channelCollection(app, platform).Insert(channel)
-	if err != nil {
-		panic(err)
+func CreateChannel(appid string, channel *Channel) error {
+	channelC, err := channelCollection(appid)
+	if err == nil {
+		channel.Created = time.Now()
+		channelC.Insert(channel)
 	}
 	return err
 }
 
-func ReadChannel(app string, platform string, id int) (Channel, error) {
+func ReadChannel(appid string, id int) (Channel, error) {
 	var channel Channel
-	err := channelCollection(app, platform).Find(bson.M{"_id": id}).One(&channel)
+	channelC, err := channelCollection(appid)
+	if err == nil {
+		err = channelC.Find(bson.M{"_id": id}).One(&channel)
+	}
 	return channel, err
 }
 
-func UpdateChannel(app string, platform string, channel Channel) error {
-	err := channelCollection(app, platform).Update(bson.M{"_id": channel.Id}, channel)
-	return err
+func UpdateChannel(appid string, id bson.ObjectId, m map[string]interface{}) (Channel, error) {
+	var newChannel Channel
+	channelC, err := channelCollection(appid)
+	if err == nil {
+		var change = mgo.Change{
+			ReturnNew: true,
+			Update: bson.M{
+				"$set": m,
+			},
+		}
+		changeInfo, err := channelC.FindId(id).Apply(change, &newChannel)
+		fmt.Println(changeInfo)
+		fmt.Println(err)
+	}
+	return newChannel, err
 }
 
-func DeleteChannel(app string, platform string, id int) error {
-	return channelCollection(app, platform).RemoveId(id)
+func DeleteChannel(appid string, id int) error {
+	channelC, err := channelCollection(appid)
+	if err == nil {
+		err = channelC.RemoveId(id)
+	}
+	return err
 }
