@@ -44,6 +44,13 @@ angular.module('app', [
   }
 ])
 
+.run(['$window',
+  function($window) {
+    if ($window.location.href.indexOf('#') == -1)
+      $window.location.href = '#/apps'
+  }
+])
+
 // 自动给请求的url加前缀（$resource）
 // .config(['$provide',
 //   function($provide) {
