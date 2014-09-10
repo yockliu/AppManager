@@ -28,6 +28,8 @@ func main() {
 		return auth.SecureCompare(username, "admin") && auth.SecureCompare(password, "guessme")
 	}))
 
+	m.Use(martini.Static("client"))
+
 	m.Use(render.Renderer(render.Options{
 		Directory:  "templates",
 		Layout:     "layout",
