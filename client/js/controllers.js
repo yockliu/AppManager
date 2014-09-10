@@ -26,16 +26,25 @@ angular.module('app.controllers', [])
 
 .controller('CreateAppCtrl', ['$scope', 'App',
   function($scope, App) {
-    App.save({
-      'name': '周末去哪儿 - v2.2.1',
-      'platforms': ['android']
-    }).$promise.then(function(data) {
-      $scope.txt = data
-      console.log(data)
-    }).catch(function(resp) {
-      $scope.txt = resp
-      console.log(resp)
-    })
+    $scope.submit = function() {
+      var app = $scope.app
+      if (!app.name) {
+        alert('应用名称不能为空')
+        return
+      }
+
+      if (app.platforms[0])
+        app.platforms[0] = 'ios'
+      if (app.platforms[1])
+        app.platforms[1] = 'android'
+
+      App.save(angular.toJson(app)).$promise.then(function(data) {
+        location.href = '#/apps'
+      }).catch(function(resp) {
+        alert('创建应用失败！')
+        console.log(resp)
+      })
+    }
   }
 ])
 

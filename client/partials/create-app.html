@@ -1,1 +1,24 @@
-<h1>{{txt}}</h1>
+<h1>Create App</h1>
+<form>
+  <table data-ng-init="app = {platforms: []}">
+    <tr>
+      <td>NAME</td>
+      <td>
+        <input type="text" data-ng-model="app.name" required>
+      </td>
+    </tr>
+    <tr>
+      <td>PLATFORMS</td>
+      <td>
+        ios: <input type="checkbox" data-ng-model="app.platforms[0]" value="ios" >
+        android: <input type="checkbox" data-ng-model="app.platforms[1]" value="android" >
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <input type="reset" value="重置">
+        <input type="submit" data-ng-click="submit()" value="创建">
+      </td>
+    </tr>
+  </table>
+</form>
