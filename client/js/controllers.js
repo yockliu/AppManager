@@ -1,29 +1,36 @@
 angular.module('app.controllers', [])
 
-.controller('AppListCtrl', ['$scope',
-  function($scope) {
-    $scope.txt = 'hello this is an app list'
+.controller('AppListCtrl', ['$scope', 'App',
+  function($scope, App) {
+    App.query().$promise.then(function(data){
+      $scope.appList = data
+    }).catch(function(resp){
+      console.log(resp)
+    })
+
+    $scope.deleteApp = function(id) {
+      var result = window.confirm('确定要删除吗？')
+      if (result) {
+        App.delete({app_id: id}).$promise.then(function(data){
+          location.reload()
+        }).catch(function(resp){
+          console.log(resp)
+          alert('删除失败！')
+        })
+      }
+    }
   }
 ])
 
-.controller('CreateAppCtrl', ['$scope', '$http',
-  function($scope, $http) {
-
-    // new App.save({'name': '周末去哪儿', 'platform': 'android'}).$promise.then(function(data){
-      // debugger
-      // $scope.txt = data
-      // console.log(data)
-    // })
-    $http.post('http://localhost:3000/api/app', {'name': '周末去哪儿', 'platform': 'android'})
-    .success(function(data, status, headers, config) {
-      console.log(data)
+.controller('CreateAppCtrl', ['$scope', 'App',
+  function($scope, App) {
+    App.save({'name': '周末去哪儿 - v2.2.1', 'platforms': ['android']}).$promise.then(function(data){
       $scope.txt = data
+      console.log(data)
+    }).catch(function(resp){
+      $scope.txt = resp
+      console.log(resp)
     })
-    .error(function(data, status, headers, config) {
-      debugger
-      // called asynchronously if an error occurs
-      // or server returns response with an error status.
-    });
   }
 ])
 
