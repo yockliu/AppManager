@@ -1,5 +1,5 @@
-<table>
-  <caption>App List</caption>
+<h1 class="content-title">App List</h1>
+<table class="table table-hover">
   <thead>
     <tr>
       <th>ID</th>
@@ -8,7 +8,7 @@
       <th>VALIDATE</th>
       <th>FORBIDDEN</th>
       <th>CREATE AT</th>
-      <th></th>
+      <th>ACTIONS</th>
     </tr>
   </thead>
   <tbody>
@@ -20,8 +20,8 @@
       <td>{{app.forbidden}}</td>
       <td>{{app.created}}</td>
       <td>
-        <a href="#/apps/{{app.id}}">查看</a>
-        <a href="" data-ng-click="deleteApp(app.id)">删除</a>
+        <a href="#/apps/{{app.id}}" class="btn btn-info">查看</a>
+        <a href="" data-ng-click="deleteApp(app.id)" class="btn btn-danger">删除</a>
       </td>
     </tr>
   </tbody>

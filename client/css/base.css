@@ -1,0 +1,64 @@
+body {
+  font-family: "PingHei","Helvetica Neue","Helvetica","Arial","Verdana","sans-serif";
+}
+
+#container {
+  position: relative;
+}
+
+/**
+ * Left Operate Pannel
+ */
+.left-pannel {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 15%;
+  padding: 60px 30px;
+  min-width: 192px;
+  text-align: center;
+  color: #d3d3d3;
+  background-color: #35373A;
+  font-size: 16px;
+  z-index: 2;
+}
+
+.left-panel ul li:hover {
+  /*background-color: #528eea;*/
+}
+
+.left-pannel ul li {
+  text-align: right;
+  padding: 10px 0;
+  font-weight: bold;
+}
+
+.left-pannel ul li a {
+  text-decoration: none;
+}
+
+.left-panel ul li a, .left-pannel ul li a:visited {
+  color: #d3d3d3;
+}
+
+.left-pannel ul li a:hover {
+  color: white;
+}
+
+/**
+ * Content Area: ng view
+ */
+.content {
+  position: relative;
+  width: 85%;
+  margin-left: auto;
+  padding: 40px 20px;
+  z-index: 1;
+}
+
+.content .content-title {
+  text-align: right;
+  border-bottom: solid 5px #528eea;
+  padding: 10px;
+}
