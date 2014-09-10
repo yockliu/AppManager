@@ -1,1 +1,28 @@
-<h1>{{txt}}</h1>
+<table>
+  <caption>App List</caption>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>NAME</th>
+      <th>PLATFORMS</th>
+      <th>VALIDATE</th>
+      <th>FORBIDDEN</th>
+      <th>CREATE AT</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr data-ng-repeat="app in appList">
+      <td>{{app.id}}</td>
+      <td>{{app.name}}</td>
+      <td>{{app.platforms}}</td>
+      <td>{{app.validate}}</td>
+      <td>{{app.forbidden}}</td>
+      <td>{{app.created}}</td>
+      <td>
+        <a href="#/apps/{{app.id}}">查看</a>
+        <a href="" data-ng-click="deleteApp(app.id)">删除</a>
+      </td>
+    </tr>
+  </tbody>
+</table>
