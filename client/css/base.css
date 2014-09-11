@@ -15,7 +15,6 @@ body {
   bottom: 0;
   left: 0;
   width: 15%;
-  padding: 60px 30px;
   min-width: 192px;
   text-align: center;
   color: #d3d3d3;
@@ -23,6 +22,11 @@ body {
   font-size: 16px;
   z-index: 2;
   text-align: center;
+}
+
+.left-pannel ul {
+  padding: 30px;
+  margin: 0 10px;
 }
 
 .left-panel ul li:hover {
@@ -47,11 +51,23 @@ body {
   color: white;
 }
 
+.left-pannel .app-title {
+  background-color: #d85a4a;/*b5453c;*/
+  font-size: 20px;
+  font-weight: bold;
+  padding: 10px 0;
+  color: white;
+  text-shadow: 0 -1px 0 rgba(0,0,0,.2);
+  -webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,.15),0 1px 1px rgba(0,0,0,.075);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.15),0 1px 1px rgba(0,0,0,.075);
+}
+
 .left-pannel #app-info {
   text-align: center;
   position: absolute;
-  bottom: 50px;
+  bottom: 20px;
   font-size: 12px;
+  padding: 0 30px;
 }
 
 /**
