@@ -27,6 +27,7 @@ body {
 .left-pannel ul {
   padding: 30px;
   margin: 0 10px;
+  list-style: square;
 }
 
 .left-panel ul li:hover {
