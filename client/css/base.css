@@ -77,12 +77,18 @@ body {
   position: relative;
   width: 85%;
   margin-left: auto;
-  padding: 40px 20px;
+  padding: 0 20px 20px;
   z-index: 1;
 }
 
 .content .content-title {
   text-align: right;
   border-bottom: solid 2px #528eea;
+  margin-top: 5px;
   padding: 10px;
+  font-size: 20px
+}
+
+.input-text-short {
+  max-width: 200px;
 }
