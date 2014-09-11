@@ -1,4 +1,4 @@
-<h1 class="content-title">Create App</h1>
+<h1 class="content-title">{{isUpdate ? 'Update App' : 'Create App'}}</h1>
 <form class="form-horizontal" role="form" data-ng-init="app = {platforms: []}">
   <div class="form-group">
     <label for="inputAppName" class="col-sm-2 control-label">NAME</label>
@@ -9,15 +9,16 @@
   <div class="form-group">
     <label for="inputPlatforms" class="col-sm-2 control-label">PLATFORMS</label>
     <div class="col-sm-10">
-      <input type="checkbox" id="inputPlatforms" data-ng-model="app.platforms[0]" value="ios"> iOS
+      <input type="checkbox" id="inputPlatforms" data-ng-true-value="'ios'" data-ng-model="app.platforms[0]"> iOS
       <br>
-      <input type="checkbox" data-ng-model="app.platforms[1]" value="android"> Android
+      <input type="checkbox" data-ng-model="app.platforms[1]" data-ng-true-value="'android'"> Android
     </div>
   </div>
   <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
         <input type="reset" class="btn btn-default" value="重置">
-        <input type="submit" class="btn btn-success" data-ng-click="submit()" value="创建">
+        <input type="submit" class="btn btn-success" data-ng-click="create()" value="创建" data-ng-hide="isUpdate">
+        <input type="submit" class="btn btn-primary" data-ng-click="update()" value="修改" data-ng-show="isUpdate">
     </div>
   </div>
 </form>

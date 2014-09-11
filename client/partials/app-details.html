@@ -21,3 +21,7 @@
     <td>{{app.created}}</td>
   </tr>
 </table>
+<div style="text-align:center;">
+  <a class="btn btn-primary" href="#/apps/update/{{app.id}}">修改</a>
+  <a class="btn btn-danger" data-ng-click="deleteApp(app.id)">删除</a>
+</div>

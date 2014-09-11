@@ -20,6 +20,10 @@ angular.module('app', [
         templateUrl: 'partials/create-app.html',
         controller: 'CreateAppCtrl'
       })
+      .when('/apps/update/:app_id', {
+        templateUrl: 'partials/create-app.html',
+        controller: 'UpdateAppCtrl'
+      })
       .when('/apps/:app_id', {
         templateUrl: 'partials/app-details.html',
         controller: 'AppDetailsCtrl'
