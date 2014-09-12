@@ -706,7 +706,7 @@ curl -X PUT \
 	-d '{
 			"code": "and-a0"
 			"name": "测试",
-			"platforms": "android"
+			"platform": "android"
 		}' \
 	http://localhost:3000/api/app/:appid/channel/:id
 ```
