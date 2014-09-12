@@ -3,7 +3,7 @@ angular.module('app.models', [])
 .factory('App', ['$resource',
   function($resource) {
     var App = $resource(
-      'http://localhost:3000/api/app/:app_id', {
+      '/api/app/:app_id', {
         app_id: '@app_id'
       }, {
         'update': {
@@ -12,6 +12,20 @@ angular.module('app.models', [])
       }
     )
     return App;
+  }
+])
+
+.factory('Version', ['$resource',
+  function($resource) {
+    var Version = $resource('/api/app/:app_id/version/:version_id', {
+      app_id: '@app_id',
+      version_id: '@version_id'
+    }, {
+      'update': {
+        method: 'PUT'
+      }
+    })
+    return Version
   }
 ])
 

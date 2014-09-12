@@ -30,6 +30,14 @@ angular.module('app', [
         templateUrl: 'partials/app-details.html',
         controller: 'AppDetailsCtrl'
       })
+      .when('/apps/:app_id/add-version', {
+        templateUrl: 'partials/add-version.html',
+        controller: 'AddVersionCtrl'
+      })
+      .when('/apps/:app_id/update-version/:version_id', {
+        templateUrl: 'partials/add-version.html',
+        controller: 'UpdateVersionCtrl'
+      })
       .when('/apps/:app_id/add-channel', {
         templateUrl: 'partials/add-channel.html',
         controller: 'AddChannelCtrl'
