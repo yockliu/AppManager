@@ -1,8 +1,12 @@
-<h1 class="content-title">{{app.name}}</h1>
+<h1 class="content-title">APP DETAILS</h1>
 <table class="table table-hover">
   <tr>
     <td>ID</td>
     <td>{{app.id}}</td>
+  </tr>
+  <tr>
+    <td>NAME</td>
+    <td>{{app.name}}</td>
   </tr>
   <tr>
     <td>PLATFORMS</td>
@@ -18,7 +22,40 @@
   </tr>
   <tr>
     <td>CREATED</td>
-    <td>{{app.created}}</td>
+    <td>{{app.created | date : DATE_DEFAULT}}</td>
+  </tr>
+  <tr>
+    <td>CHANNEL</td>
+    <td>
+      <table class="table table-hover" data-ng-show ="channels">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>CODE</th>
+            <th>NAME</th>
+            <th>PLATFORM</th>
+            <th>CREATED</th>
+            <th>UPDATED</th>
+            <th>ACTIONS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-ng-repeat="channel in channels">
+            <td>{{channel.id}}</td>
+            <td>{{channel.code}}</td>
+            <td>{{channel.name}}</td>
+            <td>{{channel.platform}}</td>
+            <td>{{channel.created | date : DATE_DEFAULT}}</td>
+            <td>{{channel.updated | date : DATE_DEFAULT}}</td>
+            <td>
+            <a href="#/apps/{{app.id}}/update-channel/{{channel.id}}?isUpdate=true">修改<a> | 
+            <a data-ng-click="deleteChannel(channel.id, $index)">删除<a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <a href="#/apps/{{app.id}}/add-channel">添加渠道</a>
+    </td>
   </tr>
 </table>
 <div style="text-align:center;">

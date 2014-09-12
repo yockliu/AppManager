@@ -18,7 +18,7 @@
       <td>{{app.platforms}}</td>
       <td>{{app.validate}}</td>
       <td>{{app.forbidden}}</td>
-      <td>{{app.created}}</td>
+      <td>{{app.created | date: DATE_DEFAULT}}</td>
       <td>
         <a href="#/apps/{{app.id}}" class="btn btn-info">查看</a>
         <a href="" data-ng-click="deleteApp(app.id)" class="btn btn-danger">删除</a>

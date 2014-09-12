@@ -28,6 +28,14 @@ angular.module('app', [
         templateUrl: 'partials/app-details.html',
         controller: 'AppDetailsCtrl'
       })
+      .when('/apps/:app_id/add-channel', {
+        templateUrl: 'partials/add-channel.html',
+        controller: 'AddChannelCtrl'
+      })
+      .when('/apps/:app_id/update-channel/:channel_id', {
+        templateUrl: 'partials/add-channel.html',
+        controller: 'UpdateChannelCtrl'
+      })
       .otherwise({
         rediretTo: '/apps'
       })
@@ -52,6 +60,12 @@ angular.module('app', [
   function($window) {
     if ($window.location.href.indexOf('#') == -1)
       $window.location.href = '#/apps'
+  }
+])
+
+.run(['$rootScope',
+  function($rootScope) {
+    $rootScope.DATE_DEFAULT = 'yyyy-MM-dd HH:mm:ss'
   }
 ])
 
