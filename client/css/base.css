@@ -99,3 +99,7 @@ body {
 .btn-longer {
   min-width: 150px;
 }
+
+.app-actions {
+  text-align: right;
+}

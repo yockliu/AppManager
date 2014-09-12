@@ -25,10 +25,48 @@
     <td>{{app.created | date : DATE_DEFAULT}}</td>
   </tr>
   <tr>
+    <td>VERSION</td>
+    <td>
+      <a href="#/apps/{{app.id}}/add-version?platforms={{app.platforms}}">添加版本</a>
+      <hr data-ng-show="versions">
+      <table class="table table-hover" data-ng-show ="versions">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>CODE</th>
+            <th>NAME</th>
+            <th>PLATFORM</th>
+            <!-- <th>GIT INDEX</th> -->
+            <!-- <th>GIT TAG</th> -->
+            <th>CREATED</th>
+            <th>UPDATED</th>
+            <th class="app-actions">ACTIONS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-ng-repeat="version in versions"> 
+            <td>{{version.id | limitTo : 8}}</td>
+            <td>{{version.code}}</td>
+            <td>{{version.name}}</td>
+            <td>{{version.platform}}</td>
+            <!-- <td>{{version.git_index}}</td> -->
+            <!-- <td>{{version.git_tag}}</td> -->
+            <td>{{version.created | date : DATE_DEFAULT}}</td>
+            <td>{{version.updated | date : DATE_DEFAULT}}</td>
+            <td class="app-actions">
+              <a href="#/apps/{{app.id}}/update-version/{{version.id}}?platforms={{app.platforms}}&isUpdate=true">修改<a> | 
+              <a data-ng-click="deleteVersion(version.id, $index)">删除<a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+  <tr>
     <td>CHANNEL</td>
     <td>
       <a href="#/apps/{{app.id}}/add-channel?platforms={{app.platforms}}">添加渠道</a>
-      <hr>
+      <hr data-ng-show ="channels">
       <table class="table table-hover" data-ng-show ="channels">
         <thead>
           <tr>
@@ -38,20 +76,20 @@
             <th>PLATFORM</th>
             <th>CREATED</th>
             <th>UPDATED</th>
-            <th>ACTIONS</th>
+            <th class="app-actions">ACTIONS</th>
           </tr>
         </thead>
         <tbody>
           <tr data-ng-repeat="channel in channels">
-            <td>{{channel.id}}</td>
+            <td>{{channel.id | limitTo : 8}}</td>
             <td>{{channel.code}}</td>
             <td>{{channel.name}}</td>
             <td>{{channel.platform}}</td>
             <td>{{channel.created | date : DATE_DEFAULT}}</td>
             <td>{{channel.updated | date : DATE_DEFAULT}}</td>
-            <td>
-            <a href="#/apps/{{app.id}}/update-channel/{{channel.id}}?platforms={{app.platforms}}&isUpdate=true">修改<a> | 
-            <a data-ng-click="deleteChannel(channel.id, $index)">删除<a>
+            <td class="app-actions">
+              <a href="#/apps/{{app.id}}/update-channel/{{channel.id}}?platforms={{app.platforms}}&isUpdate=true">修改<a> | 
+              <a data-ng-click="deleteChannel(channel.id, $index)">删除<a>
             </td>
           </tr>
         </tbody>

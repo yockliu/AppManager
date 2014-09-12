@@ -83,8 +83,8 @@ angular.module('app.controllers', [])
   }
 ])
 
-.controller('AppDetailsCtrl', ['$scope', '$routeParams', 'App', 'Channel',
-  function($scope, $routeParams, App, Channel) {
+.controller('AppDetailsCtrl', ['$scope', '$routeParams', 'App', 'Version', 'Channel',
+  function($scope, $routeParams, App, Version, Channel) {
     $scope.app = new App({
       id: $routeParams.app_id
     })
@@ -94,6 +94,14 @@ angular.module('app.controllers', [])
       console.log(data)
     }).catch(function(resp) {
       console.log(resp)
+    })
+
+    Version.query({
+      app_id: $routeParams.app_id
+    }).$promise.then(function(data) {
+      $scope.versions = data
+    }).catch(function(resp) {
+      console.error(resp)
     })
 
     Channel.query({
@@ -118,6 +126,21 @@ angular.module('app.controllers', [])
       }
     }
 
+    $scope.deleteVersion = function(id, index) {
+      var result = window.confirm('确定要删除吗？')
+      if (result) {
+        Version.delete({
+          app_id: $routeParams.app_id,
+          version_id: id
+        }).$promise.then(function(data) {
+          $scope.versions.splice(index, 1)
+        }).catch(function(resp) {
+          console.error(resp)
+          alert('删除失败！')
+        })
+      }
+    }
+
     $scope.deleteChannel = function(id, index) {
       var result = window.confirm('确定要删除吗？')
       if (result) {
@@ -135,29 +158,95 @@ angular.module('app.controllers', [])
   }
 ])
 
+.controller('AddVersionCtrl', ['$scope', '$routeParams', 'Version',
+  function($scope, $routeParams, Version) {
+    $scope.platforms = angular.fromJson($routeParams.platforms)
+
+    $scope.create = function() {
+      if (!$scope.version.name) {
+        alert('版本名称不能为空！')
+        return
+      }
+      if (!$scope.version.code) {
+        alert('版本 code 不能为空！')
+        return
+      }
+
+      var version = new Version($scope.version)
+      version.$save({
+        app_id: $routeParams.app_id
+      }).then(function(data) {
+        console.log(data)
+        location.href = '#/apps/' + $routeParams.app_id
+      }).catch(function(resp) {
+        console.error(resp)
+      })
+    }
+  }
+])
+
+.controller('UpdateVersionCtrl', ['$scope', '$routeParams', 'Version',
+  function($scope, $routeParams, Version) {
+    $scope.isUpdate = $routeParams.isUpdate
+
+    $scope.platforms = angular.fromJson($routeParams.platforms)
+    
+    Version.get({
+      app_id: $routeParams.app_id,
+      version_id: $routeParams.version_id
+    }).$promise.then(function(data) {
+      $scope.version = data
+    }).catch(function(resp) {
+      console.error(resp)
+    })
+
+    $scope.update = function() {
+      var version = $scope.version
+      if (!version.name) {
+        alert('版本名称不能为空！')
+        return
+      }
+      if (!version.code) {
+        alert('版本 code 不能为空！')
+        return
+      }
+
+      Version.update({
+        app_id: $routeParams.app_id,
+        version_id: $routeParams.version_id
+      }, {
+        code: version.code,
+        name: version.name,
+        platform: version.platform
+      }).$promise.then(function(data) {
+        location.href = '#/apps/' + $routeParams.app_id
+      }).catch(function(resp) {
+        console.error('修改版本失败！')
+      })
+    }
+  }
+])
+
 .controller('AddChannelCtrl', ['$scope', '$routeParams', 'Channel',
   function($scope, $routeParams, Channel) {
     $scope.platforms = angular.fromJson($routeParams.platforms)
     $scope.create = function() {
-      var channel = $scope.channel
-      if (!channel.name) {
+      if (!$scope.channel.name) {
         alert('渠道名称不能为空！')
         return
       }
-      if (!channel.code) {
+      if (!$scope.channel.code) {
         alert('渠道 code 不能为空！')
         return
       }
 
-      var app_id = $routeParams.app_id
-
       var channel = new Channel($scope.channel)
-      console.log(channel)
+      
       channel.$save({
-        app_id: app_id
+        app_id: $routeParams.app_id
       }).then(function(data) {
         console.log(data)
-        location.href = '#/apps/' + app_id
+        location.href = '#/apps/' + $routeParams.app_id
       }).catch(function(resp) {
         alert('添加渠道失败！')
         console.error(resp)
@@ -176,7 +265,6 @@ angular.module('app.controllers', [])
       app_id: $routeParams.app_id,
       channel_id: $routeParams.channel_id
     }).$promise.then(function(data) {
-      console.log(data)
       $scope.channel = data
     }).catch(function(resp) {
       console.log(resp)
