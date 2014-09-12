@@ -1,4 +1,6 @@
-HOST = 'http://localhost:3000'
+var HOST = 'http://localhost:3000'
+var TOKEN = 'Basic YWRtaW46Z3Vlc3NtZQ=='
+var DATE_DEFAULT = 'yyyy-MM-dd HH:mm:ss'
 
 angular.module('app', [
   'ngResource',
@@ -52,7 +54,7 @@ angular.module('app', [
     $http.defaults.headers.common['Accept'] = 'application/json'
     $http.defaults.headers.common['Content-Type'] = 'application/json'
 
-    $http.defaults.headers.common.Authorization = 'Basic YWRtaW46Z3Vlc3NtZQ=='
+    $http.defaults.headers.common.Authorization = TOKEN
   }
 ])
 
@@ -65,7 +67,7 @@ angular.module('app', [
 
 .run(['$rootScope',
   function($rootScope) {
-    $rootScope.DATE_DEFAULT = 'yyyy-MM-dd HH:mm:ss'
+    $rootScope.DATE_DEFAULT = DATE_DEFAULT
   }
 ])
 
