@@ -59,6 +59,8 @@ angular.module('app.controllers', [])
       app_id: $routeParams.app_id
     }).$promise.then(function(data) {
       $scope.app = data
+      if (data.platforms.indexOf('android') == 0)
+        $scope.app.platforms = ['', 'android']
       console.log(data)
     }).catch(function(resp) {
       console.log(resp)
@@ -69,7 +71,7 @@ angular.module('app.controllers', [])
         app_id: $scope.app.id
       }, $scope.app)
         .$promise.then(function(data) {
-          location.href = '#/apps'
+          location.href = '#/apps/' + $routeParams.app_id
         }).catch(function(resp) {
           console.err(resp)
           alert('修改失败！')
