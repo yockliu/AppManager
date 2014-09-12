@@ -50,7 +50,7 @@
             <td>{{channel.created | date : DATE_DEFAULT}}</td>
             <td>{{channel.updated | date : DATE_DEFAULT}}</td>
             <td>
-            <a href="#/apps/{{app.id}}/update-channel/{{channel.id}}?isUpdate=true">修改<a> | 
+            <a href="#/apps/{{app.id}}/update-channel/{{channel.id}}?platforms={{app.platforms}}&isUpdate=true">修改<a> | 
             <a data-ng-click="deleteChannel(channel.id, $index)">删除<a>
             </td>
           </tr>

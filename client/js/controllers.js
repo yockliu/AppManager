@@ -91,11 +91,11 @@ angular.module('app.controllers', [])
       console.log(resp)
     })
 
-    Channel.query({app_id: $routeParams.app_id}).$promise
-    .then(function(data) {
+    Channel.query({
+      app_id: $routeParams.app_id
+    }).$promise.then(function(data) {
       $scope.channels = data
-    })
-    .catch(function(resp) {
+    }).catch(function(resp) {
       console.error(resp)
     })
 
@@ -107,7 +107,7 @@ angular.module('app.controllers', [])
         }).$promise.then(function(data) {
           location.href = '#/apps'
         }).catch(function(resp) {
-          console.log(resp)
+          console.error(resp)
           alert('删除失败！')
         })
       }
@@ -116,15 +116,16 @@ angular.module('app.controllers', [])
     $scope.deleteChannel = function(id, index) {
       var result = window.confirm('确定要删除吗？')
       if (result) {
-        Channel.delete({app_id: $routeParams.app_id, channel_id: id}).$promise
-        .then(function(data) {
+        Channel.delete({
+          app_id: $routeParams.app_id,
+          channel_id: id
+        }).$promise.then(function(data) {
           $scope.channels.splice(index, 1)
-        })
-        .catch(function(resp) {
+        }).catch(function(resp) {
           console.error(resp)
           alert('删除失败！')
         })
-      } 
+      }
     }
   }
 ])
@@ -147,14 +148,53 @@ angular.module('app.controllers', [])
 
       var channel = new Channel($scope.channel)
       console.log(channel)
-      channel.$save({app_id: app_id})
-      .then(function(data) {
+      channel.$save({
+        app_id: app_id
+      }).then(function(data) {
         console.log(data)
         location.href = '#/apps/' + app_id
-      })
-      .catch(function(resp) {
+      }).catch(function(resp) {
         alert('添加渠道失败！')
         console.error(resp)
+      })
+    }
+  }
+])
+
+.controller('UpdateChannelCtrl', ['$scope', '$routeParams', 'Channel',
+  function($scope, $routeParams, Channel) {
+    $scope.isUpdate = $routeParams.isUpdate
+
+    $scope.platforms = angular.fromJson($routeParams.platforms)
+
+    Channel.get({
+      app_id: $routeParams.app_id,
+      channel_id: $routeParams.channel_id
+    }).$promise.then(function(data) {
+      console.log(data)
+      $scope.channel = data
+    }).catch(function(resp) {
+      console.log(resp)
+    })
+
+    $scope.update = function() {
+      var channel = $scope.channel
+      if (!channel.name) {
+        alert('渠道名称不能为空！')
+        return
+      }
+      if (!channel.code) {
+        alert('渠道 code 不能为空！')
+        return
+      }
+
+      Channel.update({
+        app_id: $routeParams.app_id,
+        channel_id: $routeParams.channel_id
+      }, channel).$promise.then(function(data) {
+        location.href = '#/apps/' + $routeParams.app_id
+      }).catch(function(resp) {
+        console.error('修改渠道失败！')
       })
     }
   }
