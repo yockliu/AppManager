@@ -67,15 +67,18 @@ angular.module('app.controllers', [])
     })
 
     $scope.update = function() {
+      var app = {
+        name: $scope.app.name,
+        platforms: $scope.app.platforms
+      }
       App.update({
         app_id: $scope.app.id
-      }, $scope.app)
-        .$promise.then(function(data) {
-          location.href = '#/apps/' + $routeParams.app_id
-        }).catch(function(resp) {
-          console.err(resp)
-          alert('修改失败！')
-        })
+      }, app).$promise.then(function(data) {
+        location.href = '#/apps/' + $routeParams.app_id
+      }).catch(function(resp) {
+        console.err(resp)
+        alert('修改失败！')
+      })
     }
   }
 ])
@@ -193,7 +196,11 @@ angular.module('app.controllers', [])
       Channel.update({
         app_id: $routeParams.app_id,
         channel_id: $routeParams.channel_id
-      }, channel).$promise.then(function(data) {
+      }, {
+        code: channel.code,
+        name: channel.name,
+        platform: channel.platform
+      }).$promise.then(function(data) {
         location.href = '#/apps/' + $routeParams.app_id
       }).catch(function(resp) {
         console.error('修改渠道失败！')
