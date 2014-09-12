@@ -33,6 +33,14 @@ angular.module('app.controllers', [])
         return
       }
 
+      // remove empty item
+      app.platforms = _.compact(app.platforms)
+
+      if (!app.platforms.length) {
+        alert('至少选择一个平台！')
+        return
+      }
+
       App.save(angular.toJson(app)).$promise.then(function(data) {
         location.href = '#/apps'
       }).catch(function(resp) {
@@ -123,6 +131,7 @@ angular.module('app.controllers', [])
 
 .controller('AddChannelCtrl', ['$scope', '$routeParams', 'Channel',
   function($scope, $routeParams, Channel) {
+    $scope.platforms = angular.fromJson($routeParams.platforms)
     $scope.create = function() {
       var channel = $scope.channel
       if (!channel.name) {
