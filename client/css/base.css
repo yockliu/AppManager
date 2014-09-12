@@ -42,6 +42,7 @@ body {
 
 .left-pannel ul li a {
   text-decoration: none;
+  text-shadow: 0 1px #222;
 }
 
 .left-panel ul li a, .left-pannel ul li a:visited {
@@ -69,6 +70,7 @@ body {
   bottom: 20px;
   font-size: 12px;
   padding: 0 30px;
+  text-shadow: 0 1px #333;
 }
 
 /**
