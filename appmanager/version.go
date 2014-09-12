@@ -83,6 +83,7 @@ func UpdateVersion(appid string, id bson.ObjectId, m map[string]interface{}) (Ve
 	var newVersion Version
 	versionC, err := versionCollection(appid)
 	if err == nil {
+		m["updated"] = time.Now()
 		var change = mgo.Change{
 			ReturnNew: true,
 			Update: bson.M{

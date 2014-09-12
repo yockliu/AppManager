@@ -81,6 +81,7 @@ func UpdateChannel(appid string, id bson.ObjectId, m map[string]interface{}) (Ch
 	var newChannel Channel
 	channelC, err := channelCollection(appid)
 	if err == nil {
+		m["updated"] = time.Now()
 		var change = mgo.Change{
 			ReturnNew: true,
 			Update: bson.M{
