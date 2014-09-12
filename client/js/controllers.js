@@ -8,13 +8,13 @@ angular.module('app.controllers', [])
       console.log(resp)
     })
 
-    $scope.deleteApp = function(id) {
+    $scope.deleteApp = function(id, index) {
       var result = window.confirm('确定要删除吗？')
       if (result) {
         App.delete({
           app_id: id
         }).$promise.then(function(data) {
-          location.reload()
+          $scope.appList.splice(index, 1)
         }).catch(function(resp) {
           console.log(resp)
           alert('删除失败！')

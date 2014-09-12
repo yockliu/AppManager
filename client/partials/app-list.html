@@ -21,7 +21,7 @@
       <td>{{app.created | date: DATE_DEFAULT}}</td>
       <td>
         <a href="#/apps/{{app.id}}" class="btn btn-info">查看</a>
-        <a href="" data-ng-click="deleteApp(app.id)" class="btn btn-danger">删除</a>
+        <a href="" data-ng-click="deleteApp(app.id, $index)" class="btn btn-danger">删除</a>
       </td>
     </tr>
   </tbody>
