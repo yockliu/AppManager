@@ -9,7 +9,7 @@ import (
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/auth"
 	"github.com/martini-contrib/render"
-	"time"
+	//	"time"
 )
 
 func main() {
@@ -42,10 +42,4 @@ func main() {
 	appmanager.RouteApi(m)
 
 	m.Run()
-
-	var ab = appmanager.NewAppBuilder()
-	go ab.Run2()
-	for {
-		time.Sleep(time.Second)
-	}
 }

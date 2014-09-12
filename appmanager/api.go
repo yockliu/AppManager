@@ -30,7 +30,82 @@ func RouteApi(m *martini.ClassicMartini) {
 		r.Get("/app/:appid/channel/:id", api_channel_get)
 		r.Put("/app/:appid/channel/:id", api_channel_put)
 		r.Delete("/app/:appid/channel/:id", api_channel_delete)
+
+		r.Post("/build", api_app_build)
+		r.Get("/build/status/:appid", api_app_build_status)
 	})
+}
+
+func api_app_build(params martini.Params, req *http.Request, r render.Render) {
+	body, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		r.JSON(500, err.Error())
+		return
+	}
+	var m map[string]interface{}
+	json.Unmarshal(body, &m)
+	fmt.Println(m)
+
+	appid := m["appid"]
+	versionid := m["versionid"]
+	channels := m["channels"]
+
+	//appid = "540ea615421e44d11e000001"
+	//versionid = "540ebd3e421e44d696000002"
+
+	appidst, ok := appid.(string)
+	if !ok {
+		r.JSON(500, "appid格式错误")
+		return
+	}
+
+	versionidst, ok := versionid.(string)
+	if !ok {
+		r.JSON(500, "versionid格式错误")
+		return
+	}
+
+	cia, ok := channels.([]interface{})
+	if !ok {
+		r.JSON(500, "channels格式错误")
+		return
+	}
+	channelsar := make([]string, len(cia))
+	for i, v := range cia {
+		channelsar[i], ok = v.(string)
+		if !ok {
+			r.JSON(500, "channels格式错误")
+			return
+		}
+	}
+
+	appBuilder, err := GetAppBuilder(appidst)
+	if err != nil {
+		r.JSON(500, err.Error())
+		return
+	}
+
+	err = appBuilder.RunBuild(appidst, versionidst, channelsar)
+	if err != nil {
+		r.JSON(500, err.Error())
+	}
+
+	r.JSON(200, "{}")
+}
+
+func api_app_build_status(params martini.Params, req *http.Request, r render.Render) {
+	body, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		r.JSON(500, err.Error())
+		return
+	}
+	var m map[string]interface{}
+	json.Unmarshal(body, &m)
+	fmt.Println(m)
+
+	//appid := m["appid"]
+
+	r.JSON(200, "{}")
 }
 
 func api_app_list(r render.Render) {

@@ -5,9 +5,6 @@ import (
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/binding"
 	"github.com/martini-contrib/render"
-	"io/ioutil"
-	"os"
-	"os/exec"
 )
 
 func Init() {
@@ -62,39 +59,4 @@ func channel_add(caForm ChannelAddForm, r render.Render) {
 type ChannelAddForm struct {
 	Name string `form:"channel_name" binding:"required"`
 	Code string `form:"channel_code" binding:"required"`
-}
-
-type AppBuilder struct {
-	cmd *exec.Cmd
-}
-
-func (ab *AppBuilder) Run1() {
-	stdout, err := ab.cmd.StdoutPipe()
-	if err != nil {
-		fmt.Println("Error: %s\n", err)
-		return
-	}
-	if err := ab.cmd.Start(); err != nil {
-		fmt.Println("Error: %s\n", err)
-		return
-	}
-	d, _ := ioutil.ReadAll(stdout)
-	if err := ab.cmd.Wait(); err != nil {
-		fmt.Println("Error: %s\n", err)
-		return
-	}
-	fmt.Println(string(d))
-}
-
-func (ab *AppBuilder) Run2() {
-	ab.cmd.Stdout = os.Stdout
-	ab.cmd.Stderr = os.Stderr
-	ab.cmd.Run()
-}
-
-func NewAppBuilder() AppBuilder {
-	fmt.Println("RunBuild")
-	cmd := exec.Command("/bin/sh", "-c", "cd /Users/yinxiaoliu/android/zhoumo_android/\n./gradlew tasks")
-	ab := AppBuilder{cmd}
-	return ab
 }

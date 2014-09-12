@@ -10,13 +10,14 @@ import (
 )
 
 type App struct {
-	Id        bson.ObjectId `json:"id"        bson:"_id,omitempty"`
-	Name      string        `json:"name"      bson:"name"`
-	Platforms []string      `json:"platforms" bson:"platforms"`
-	Created   time.Time     `json:"created"   bson:"created"`
-	Updated   time.Time     `json:"updated"   bson:"updated,omitempty"`
-	Forbidden bool          `json:"forbidden" bson:"forbidden"`
-	Validate  bool          `json:"validate"  bson:"validate"`
+	Id          bson.ObjectId `json:"id"        bson:"_id,omitempty"`
+	Name        string        `json:"name"      bson:"name"`
+	Platforms   []string      `json:"platforms" bson:"platforms"`
+	ProjectPath string        `json:"prj_path"  bson:"prj_path"`
+	Created     time.Time     `json:"created"   bson:"created"`
+	Updated     time.Time     `json:"updated"   bson:"updated,omitempty"`
+	Forbidden   bool          `json:"forbidden" bson:"forbidden"`
+	Validate    bool          `json:"validate"  bson:"validate"`
 }
 
 var appCollection *mgo.Collection
