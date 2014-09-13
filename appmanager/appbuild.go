@@ -72,7 +72,7 @@ func (ab *AppBuilder) RunBuild(appid string, versionid string, channels []string
 	return nil
 }
 
-func (ab *AppBuilder) isRunning() bool {
+func (ab *AppBuilder) IsRunning() bool {
 	return ab.running
 }
 
