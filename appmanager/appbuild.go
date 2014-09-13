@@ -59,7 +59,7 @@ func (ab *AppBuilder) RunBuild(appid string, versionid string, channels []string
 			chString += ","
 		}
 	}
-	cmd := exec.Command("/bin/sh", "-c", "./build.sh "+app.ProjectPath+" "+version.GitTag+" "+chString)
+	cmd := exec.Command("/bin/sh", "-c", "./build.sh "+app.Name+app.Id.Hex()+" "+app.ProjectPath+" "+version.GitTag+" "+chString)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 

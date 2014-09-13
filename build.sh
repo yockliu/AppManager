@@ -2,9 +2,14 @@
 
 echo "run build sh"
 
-projectPath=$1
-gitTag=$2
-channelGroup=$3
+SH_PATH=`pwd`
+APP_IDENTI=$1
+projectPath=$2
+gitTag=$3
+channelGroup=$4
+
+tmpgradle=tmp.gradle
+buildgradle=zhoumo/build.gradle
 
 echo projectPath + $projectPath
 echo gitTag + $gitTag
@@ -16,22 +21,14 @@ git reset --hard
 git pull
 git co $gitTag
 
-#sed -i '' '/productFlavors/a\ 
-#aaa
-#' zhoumo/build.gradle
-
-#sed -i '' 's/productFlavors {*}/productFlavors{\n}/g' zhoumo/build.gradle
-
-#sed -i '' '/productFlavors \{/{N;/!\}/}D' zhoumo/build.gradle
-
-rm  tmp.gradle
+rm $tmpgradle
 
 goinFlavors=false
 DONE=false
 until $DONE 
 do read || DONE=true
 	if [ $goinFlavors = false ]; then
-		echo "$REPLY" >> tmp.gradle
+		echo "$REPLY" >> $tmpgradle
 	fi
 	if [ "$REPLY" = "    productFlavors {" ]; then
 		goinFlavors=true
@@ -40,13 +37,20 @@ do read || DONE=true
 		for channel in `echo "\t\t$channelGroup" | tr ',' ' '`
 		do
 			#echo $channel >> tmp.gradle
-			echo $channel | sed 's/and-//' >> tmp.gradle
+			echo $channel | sed 's/and-//' >> $tmpgradle
 		done
-		echo $REPLY >> tmp.gradle
+		echo $REPLY >> $tmpgradle
 		goinFlavors=false
 	fi
-done < zhoumo/build.gradle
+done < $buildgradle
 
-mv tmp.gradle zhoumo/build.gradle
+mv $tmpgradle $buildgradle
 
-./gradlew assembleRelease 
+#./gradlew assembleRelease 
+
+outputSource=$projectPath/zhoumo/build/outputs/apk/
+outputDest=$SH_PATH/apk/$APP_IDENTI/$gitTag/
+echo $outputSource
+echo $outputDest
+mkdir -p $outputDest
+rsync -vaz --exclude="*unaligned.apk" $outputSource  $outputDest
