@@ -15,24 +15,6 @@ type AppBuilder struct {
 
 var appbuilderMap map[string]*AppBuilder = make(map[string]*AppBuilder)
 
-//func (ab *AppBuilder) Run1() {
-//	stdout, err := ab.cmd.StdoutPipe()
-//	if err != nil {
-//		fmt.Println("Error: %s\n", err)
-//		return
-//	}
-//	if err := ab.cmd.Start(); err != nil {
-//		fmt.Println("Error: %s\n", err)
-//		return
-//	}
-//	d, _ := ioutil.ReadAll(stdout)
-//	if err := ab.cmd.Wait(); err != nil {
-//		fmt.Println("Error: %s\n", err)
-//		return
-//	}
-//	fmt.Println(string(d))
-//}
-
 func (ab *AppBuilder) RunBuild(appid string, versionid string, channels []string) error {
 	if ab.running {
 		return errors.New("正在打包")
@@ -56,8 +38,28 @@ func (ab *AppBuilder) RunBuild(appid string, versionid string, channels []string
 		return err
 	}
 
-	shcmd := "cd " + app.ProjectPath + "\n" + "git checkout " + version.GitTag + "\n" // + "./gradlew clean"
-	cmd := exec.Command("/bin/sh", "-c", shcmd)
+	changeDir := "cd " + app.ProjectPath + "\n"
+
+	//gitStash := "git stash\n"
+
+	checkoutTag := "git checkout " + version.GitTag + "\n"
+
+	//gitStashPop := "git stash pop\n"
+
+	gradleClean := "./gradlew clean\n"
+
+	shcmd := changeDir + checkoutTag + gradleClean
+
+	fmt.Println(shcmd)
+
+	var chString string = ""
+	for i, v := range channels {
+		chString += v
+		if i < len(channels) {
+			chString += ","
+		}
+	}
+	cmd := exec.Command("/bin/sh", "-c", "./build.sh "+app.ProjectPath+" "+version.GitTag+" "+chString)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
@@ -66,7 +68,7 @@ func (ab *AppBuilder) RunBuild(appid string, versionid string, channels []string
 	cmd.Start()
 	cmd.Wait()
 	ab.running = false
-	fmt.Println("cmd run end")
+	fmt.Println("appbuilder cmd run end")
 	return nil
 }
 
