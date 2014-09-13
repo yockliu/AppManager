@@ -14,7 +14,11 @@
     <tr data-ng-repeat="app in appList">
       <td>{{app.id}}</td>
       <td>{{app.name}}</td>
-      <td>{{app.platforms}}</td>
+      <td>
+        <i class="icon ion-social-android" data-ng-hide="app.platforms.indexOf('android') < 0"></i>
+        <!-- <span class="icon-divider" data-ng-show="app.platforms.length > 1"> | </span> -->
+        <i class="icon ion-social-apple" data-ng-hide="app.platforms.indexOf('ios') < 0"></i>
+      </td>
       <td>{{app.forbidden}}</td>
       <td>{{app.created | date: DATE_DEFAULT}}</td>
       <td>

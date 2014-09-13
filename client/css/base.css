@@ -103,3 +103,12 @@ body {
 .app-actions {
   text-align: right;
 }
+
+.icon {
+  font-size: 18px;
+  margin: 0 5px 
+}
+
+.icon-divider {
+  vertical-align: middle;
+}
