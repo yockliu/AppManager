@@ -1,6 +1,7 @@
 var HOST = 'http://localhost:3000'
 var TOKEN = 'Basic YWRtaW46Z3Vlc3NtZQ=='
-var DATE_DEFAULT = 'yyyy-MM-dd HH:mm:ss'
+var DATE_DEFAULT = 'yyyy-MM-dd HH:mm'
+var HASH_LENGTH_DEFAULT = 10
 
 angular.module('app', [
   'ngResource',
@@ -76,6 +77,7 @@ angular.module('app', [
 .run(['$rootScope',
   function($rootScope) {
     $rootScope.DATE_DEFAULT = DATE_DEFAULT
+    $rootScope.HASH_LENGTH_DEFAULT = HASH_LENGTH_DEFAULT
   }
 ])
 

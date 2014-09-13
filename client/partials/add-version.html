@@ -13,6 +13,18 @@
     </div>
   </div>
   <div class="form-group">
+    <label for="inputGitIndex" class="col-sm-2 control-label">GIT INDEX</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control input-text-short" id="inputGitIndex" data-ng-model="version.git_index" placeholder="input git index">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputGitTag" class="col-sm-2 control-label">GIT TAG</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control input-text-short" id="inputGitTag" data-ng-model="version.git_tag" placeholder="input git tag">
+    </div>
+  </div>
+  <div class="form-group">
     <label for="selectPlatforms" class="col-sm-2 control-label">PLATFORMS</label>
     <div class="col-sm-10">
       <select name="platform" data-ng-model="version.platform" data-ng-init="version.platform = platforms[0]">

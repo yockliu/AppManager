@@ -36,8 +36,8 @@
             <th>CODE</th>
             <th>NAME</th>
             <th>PLATFORM</th>
-            <!-- <th>GIT INDEX</th> -->
-            <!-- <th>GIT TAG</th> -->
+            <th>GIT INDEX</th>
+            <th>GIT TAG</th>
             <th>CREATED</th>
             <th>UPDATED</th>
             <th class="app-actions">ACTIONS</th>
@@ -45,12 +45,12 @@
         </thead>
         <tbody>
           <tr data-ng-repeat="version in versions"> 
-            <td>{{version.id | limitTo : 8}}</td>
+            <td>{{version.id | limitTo : HASH_LENGTH_DEFAULT}}</td>
             <td>{{version.code}}</td>
             <td>{{version.name}}</td>
             <td>{{version.platform}}</td>
-            <!-- <td>{{version.git_index}}</td> -->
-            <!-- <td>{{version.git_tag}}</td> -->
+            <td>{{version.git_index | limitTo : HASH_LENGTH_DEFAULT}}</td>
+            <td>{{version.git_tag}}</td>
             <td>{{version.created | date : DATE_DEFAULT}}</td>
             <td>{{version.updated | date : DATE_DEFAULT}}</td>
             <td class="app-actions">
@@ -81,7 +81,7 @@
         </thead>
         <tbody>
           <tr data-ng-repeat="channel in channels">
-            <td>{{channel.id | limitTo : 8}}</td>
+            <td>{{channel.id | limitTo : HASH_LENGTH_DEFAULT}}</td>
             <td>{{channel.code}}</td>
             <td>{{channel.name}}</td>
             <td>{{channel.platform}}</td>

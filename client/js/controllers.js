@@ -217,7 +217,9 @@ angular.module('app.controllers', [])
       }, {
         code: version.code,
         name: version.name,
-        platform: version.platform
+        platform: version.platform,
+        git_index: version.git_index,
+        git_tag: version.git_tag
       }).$promise.then(function(data) {
         location.href = '#/apps/' + $routeParams.app_id
       }).catch(function(resp) {
