@@ -59,8 +59,8 @@ angular.module('app.controllers', [])
       app_id: $routeParams.app_id
     }).$promise.then(function(data) {
       $scope.app = data
-      if (data.platforms.indexOf('android') == 0)
-        $scope.app.platforms = ['', 'android']
+      if (data.platforms.indexOf('ios') == 0)
+        $scope.app.platforms = ['', 'ios']
       console.log(data)
     }).catch(function(resp) {
       console.log(resp)
