@@ -432,7 +432,7 @@ curl -X POST \
 	-d '{
 			"code": "1"
 			"name": "0.0.1",
-			"platforms": "android"
+			"platform": "android"
 		}' \
 	http://localhost:3000/api/app/:appid/version
 ```
