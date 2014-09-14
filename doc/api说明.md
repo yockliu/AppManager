@@ -750,3 +750,70 @@ curl -X DELETE \
 ```
 status: 204
 ```
+
+##AppBuild
+
+####apis
+
+* [build](#anchor-build)
+* [build status](#anchor-build_status)
+* [package download urls](#anchor-package_download_url)
+
+###<a name="anchor-build" id="anchor-build">build</a>
+
+####Request
+
+Method
+
+```
+POST
+```
+
+Path
+
+```
+/api/build
+```
+
+Body
+
+```
+{
+	"appid": "$appid",
+	"versionid": "$versionid",
+	"channels": [$channel_code_arrays]
+}
+```
+
+####Response
+
+```
+status: 200
+```
+
+###<a name="anchor-build_status" id="anchor-build_status">build status</a>
+
+####Request
+
+Method
+
+```
+GET
+```
+
+Path
+
+```
+/api/build/status/:appid
+```
+
+####Response
+
+```
+status: 200
+body: {"running":$isrunning} // isrunning = [true | false]
+```
+
+###<a name="anchor-package_download_url" id="anchor-package_download_url">package download urls</a>
+
+待定
