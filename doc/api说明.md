@@ -115,19 +115,27 @@ type App struct {
 
 ####request
 
-#####Method
-**_Get_**
+Method
 
-#####Path
-**_/api/app_**
+```
+GET
+```
+
+Path
+
+```
+/api/app
+```
 
 
 ####response
 	
-	status: 200
-	body:
-		[{app json 1},{app json 2},...]
-		[] // 为空的情况
+```
+status: 200
+body:
+	[{app json 1},{app json 2},...]
+	[] // 为空的情况
+```
 
 ####示例
 
@@ -136,6 +144,7 @@ type App struct {
 ```
 curl -X GET \
 	-H "Authorization: Basic YWRtaW46Z3Vlc3NtZQ==" \
+
 	http://localhost:3000/api/app
 ```
 
@@ -154,11 +163,17 @@ body:
 
 ####request
 
-#####Method
-**_GET_**
+Method
 
-#####Path
-**_/api/app/:id_**
+```
+GET
+```
+
+Path
+
+```
+/api/app/:id
+```
 
 
 ####response
@@ -191,15 +206,23 @@ body:
 
 ####request
 
-#####Method
-**_POST_**
+Method
 
-#####Path
-**_/api/app_**
+```
+POST
+```
 
-#####Body
+Path
 
-**_{app json}_**
+```
+/api/app
+```
+
+Body
+
+```
+{app json}
+```
 
 ####response
 
@@ -234,15 +257,23 @@ body: {"name": "周末","platforms":["android"]}
 
 ####request
 
-#####Method
-**_PUT_**
+Method
 
-#####Path
-**_/api/app/:id_**
+```
+PUT
+```
 
-#####Body
+Path
 
-**_{app json}_**
+```
+/api/app/:id
+```
+
+Body
+
+```
+{app json}
+```
 
 ####response
 
@@ -279,11 +310,17 @@ body: {"name": "周末","platforms":["android"]}
 
 ####request
 
-#####Method
-**_DELETE_**
+Method
 
-#####Path
-**_/api/app/:id_**
+```
+DELETE
+```
+
+Path
+
+```
+/api/app/:id
+```
 
 ####response
 
@@ -346,11 +383,17 @@ type Version struct {
 
 ####request
 
-#####Method
-**_Get_**
+Method
 
-#####Path
-**_/api/app/:appid/version_**
+```
+GET
+```
+
+Path
+
+```
+/api/app/:appid/version
+```
 
 
 ####response
@@ -385,11 +428,17 @@ body:
 
 ####request
 
-#####Method
-**_GET_**
+Method
 
-#####Path
-**_/api/app/:appid/version/:id_**
+```
+GET
+```
+
+Path
+
+```
+/api/app/:appid/version/:id
+```
 
 
 ####response
@@ -417,15 +466,23 @@ curl -X GET \
 
 ####request
 
-#####Method
-**_POST_**
+Method
 
-#####Path
-**_/api/app/:appid/version_**
+```
+POST
+```
 
-#####Body
+Path
 
-**_{version json}_**
+```
+/api/app/:appid/version
+```
+
+Body
+
+```
+{version json}
+```
 
 ####response
 
@@ -461,15 +518,23 @@ body: {"id": "...","code": "1","name": "0.0.1","platforms":"android"}
 
 ####request
 
-#####Method
-**_PUT_**
+Method
 
-#####Path
-**_/api/app/:appid/version/:id_**
+```
+PUT
+```
 
-#####Body
+Path
 
-**_{version json}_**
+```
+/api/app/:appid/version/:id
+```
+
+Body
+
+```
+{version json}
+```
 
 ####response
 
@@ -505,11 +570,17 @@ body: {"code": "1","name": "0.0.1","platforms":"android"}
 
 ####request
 
-#####Method
-**_DELETE_**
+Method
 
-#####Path
-**_/api/app/:appid/version/:id_**
+```
+DELETE
+```
+
+Path
+
+```
+/api/app/:appid/version/:id
+```
 
 ####response
 
@@ -571,11 +642,17 @@ type Channel struct {
 
 ####request
 
-#####Method
-**_Get_**
+Method
 
-#####Path
-**_/api/app/:appid/channel_**
+```
+GET
+```
+
+Path
+
+```
+/api/app/:appid/channel
+```
 
 
 ####response
@@ -610,11 +687,17 @@ body:
 
 ####request
 
-#####Method
-**_GET_**
+Method
 
-#####Path
-**_/api/app/:appid/channel/:id_**
+```
+GET
+```
+
+Path
+
+```
+/api/app/:appid/channel/:id
+```
 
 
 ####response
@@ -647,15 +730,23 @@ body:
 
 ####request
 
-#####Method
-**_POST_**
+Method
 
-#####Path
-**_/api/app/:appid/channel_**
+```
+POST
+```
 
-#####Body
+Path
 
-**_{channel json}_**
+```
+/api/app/:appid/channel
+```
+
+Body
+
+```
+{channel json}
+```
 
 ####response
 
@@ -691,15 +782,23 @@ body: {"id":"540849ad2a936f110737225d","code":"and-a0","name":"测试","platform
 
 ####request
 
-#####Method
-**_PUT_**
+Method
 
-#####Path
-**_/api/app/:appid/channel/:id_**
+```
+PUT
+```
 
-#####Body
+Path
 
-**_{channel json}_**
+```
+/api/app/:appid/channel/:id
+```
+
+Body
+
+```
+{channel json}
+```
 
 ####response
 
@@ -735,11 +834,17 @@ body: {"id":"540849ad2a936f110737225d","code":"and-a0","name":"测试","platform
 
 ####request
 
-#####Method
-**_DELETE_**
+Method
 
-#####Path
-**_/api/app/:appid/channel/:id_**
+```
+DELETE
+```
+
+Path
+
+```
+/api/app/:appid/channel/:id
+```
 
 ####response
 
