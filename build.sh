@@ -34,7 +34,7 @@ do read || DONE=true
 		goinFlavors=true
 	fi
 	if [ $goinFlavors = true ] && [ "$REPLY" = "    }" ]; then
-		for channel in `echo "\t\t$channelGroup" | tr ',' ' '`
+		for channel in `echo "$channelGroup" | tr ',' ' '`
 		do
 			#echo $channel >> tmp.gradle
 			echo $channel | sed 's/and-//' >> $tmpgradle
