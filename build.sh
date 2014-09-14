@@ -53,4 +53,4 @@ outputDest=$SH_PATH/static/apk/$APP_IDENTI/$gitTag/
 echo $outputSource
 echo $outputDest
 mkdir -p $outputDest
-rsync -vaz --exclude="*unaligned.apk" $outputSource  $outputDest
+rsync -vaz --exclude="*unaligned.apk" --include="*release.apk" $outputSource  $outputDest
