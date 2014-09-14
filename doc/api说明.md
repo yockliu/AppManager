@@ -305,7 +305,7 @@ curl -X DELETE \
 status: 204
 ```
 
-##<a name="anchor-Vesion" id="anchor-Version">Version</a>
+##<a name="anchor-Version" id="anchor-Version">Version</a>
 
 ####go struct
 ```
