@@ -8,7 +8,13 @@
 
 ---
 
-##基本规则
+##目录
+
+* [基本规则](#anchor-基本规则)
+* ...
+* [AppBuild](#anchor-AppBuild)
+
+##<a name="anchor-基本规则" id="anchor-基本规则">基本规则</a>
 
 ###协议
 
@@ -751,7 +757,7 @@ curl -X DELETE \
 status: 204
 ```
 
-##AppBuild
+##<a name="anchor-AppBuild" id="anchor-AppBuild">AppBuild</a>
 
 ####apis
 
