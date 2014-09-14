@@ -18,7 +18,7 @@ echo channelGroup + $channelGroup
 cd $projectPath
 
 git reset --hard
-git pull
+git pull --all
 git checkout $gitTag
 
 rm $tmpgradle
