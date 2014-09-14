@@ -49,7 +49,7 @@ mv $tmpgradle $buildgradle
 ./gradlew assembleRelease 
 
 outputSource=$projectPath/zhoumo/build/outputs/apk/
-outputDest=$SH_PATH/apk/$APP_IDENTI/$gitTag/
+outputDest=$SH_PATH/static/apk/$APP_IDENTI/$gitTag/
 echo $outputSource
 echo $outputDest
 mkdir -p $outputDest
