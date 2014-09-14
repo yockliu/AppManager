@@ -22,7 +22,10 @@
   </tr>
   <tr>
     <td>FORBIDDEN</td>
-    <td>{{app.forbidden}}</td>
+    <td>
+      <i class="ion-checkmark-round icon icon-green" data-ng-hide="app.forbidden"></i>
+      <i class="ion-close-round icon icon-red" data-ng-show="app.forbidden"></i>
+    </td>
   </tr>
   <tr>
     <td>CREATED</td>

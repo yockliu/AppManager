@@ -112,3 +112,11 @@ body {
 .icon-divider {
   vertical-align: middle;
 }
+
+.icon-green {
+  color: green;
+}
+
+.icon-red {
+  color: red;
+}
