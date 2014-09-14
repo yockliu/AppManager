@@ -11,8 +11,12 @@
 ##目录
 
 * [基本规则](#anchor-基本规则)
-* ...
+* [App](#anchor-App)
+* [Version](#anchor-Version)
+* [Channel](#anchor-Channel)
 * [AppBuild](#anchor-AppBuild)
+
+---
 
 ##<a name="anchor-基本规则" id="anchor-基本规则">基本规则</a>
 
@@ -70,7 +74,7 @@
 
 ---
 
-##App
+##<a name="anchor-App" id="anchor-App">App</a>
 
 ####go struct
 ```
@@ -301,7 +305,7 @@ curl -X DELETE \
 status: 204
 ```
 
-##Version
+##<a name="anchor-Vesion" id="anchor-Version">Version</a>
 
 ####go struct
 ```
@@ -527,7 +531,7 @@ curl -X DELETE \
 status: 204
 ```
 
-##Channel
+##<a name="anchor-Channel" id="anchor-Channel">Channel</a>
 
 ####go struct
 ```
