@@ -19,7 +19,7 @@ cd $projectPath
 
 git reset --hard
 git pull
-git co $gitTag
+git checkout $gitTag
 
 rm $tmpgradle
 
