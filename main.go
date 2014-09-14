@@ -29,6 +29,7 @@ func main() {
 	}))
 
 	m.Use(martini.Static("client"))
+	m.Use(martini.Static("apk"))
 
 	m.Use(render.Renderer(render.Options{
 		Directory:  "templates",

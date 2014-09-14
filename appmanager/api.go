@@ -94,18 +94,17 @@ func api_app_build(params martini.Params, req *http.Request, r render.Render) {
 }
 
 func api_app_build_status(params martini.Params, req *http.Request, r render.Render) {
-	body, err := ioutil.ReadAll(req.Body)
+	appid := params["appid"]
+
+	appBuilder, err := GetAppBuilder(appid)
 	if err != nil {
 		r.JSON(500, err.Error())
 		return
 	}
-	var m map[string]interface{}
-	json.Unmarshal(body, &m)
-	fmt.Println(m)
 
-	//appid := m["appid"]
+	appBuilderStatus := fmt.Sprintf("{\"running\":%v}", appBuilder.IsRunning())
 
-	r.JSON(200, "{}")
+	r.JSON(200, appBuilderStatus)
 }
 
 func api_app_list(r render.Render) {
