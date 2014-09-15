@@ -83,8 +83,8 @@ angular.module('app.controllers', [])
   }
 ])
 
-.controller('AppDetailsCtrl', ['$scope', '$routeParams', 'App', 'Version', 'Channel',
-  function($scope, $routeParams, App, Version, Channel) {
+.controller('AppDetailsCtrl', ['$scope', '$routeParams', '$http', 'App', 'Version', 'Channel',
+  function($scope, $routeParams, $http, App, Version, Channel) {
     $scope.app = new App({
       id: $routeParams.app_id
     })
@@ -155,6 +155,23 @@ angular.module('app.controllers', [])
         })
       }
     }
+
+    $scope.packApk = function(id) {
+      var data = {
+        "appid": id,
+        "versionid": "540ebd21421e44d696000001",
+        "channels": ["and-c1", "and-f1"]
+      }
+      var responsePromise = $http.post("/api/build", data);
+
+      responsePromise.success(function(data, status, headers, config) {
+        alert("packApk success");
+      });
+      responsePromise.error(function(data, status, headers, config) {
+        alert("packApk failed!");
+      });
+    }
+
   }
 ])
 

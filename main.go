@@ -4,6 +4,7 @@ import (
 	"./appmanager"
 	"./mongodb"
 	"./route"
+	"net/http"
 	//	"encoding/base64"
 	"fmt"
 	"github.com/go-martini/martini"
@@ -29,7 +30,13 @@ func main() {
 	}))
 
 	m.Use(martini.Static("client"))
-	m.Use(martini.Static("apk"))
+	m.Use(martini.Static("static"))
+
+	fileServer := http.FileServer(http.Dir("./static"))
+	m.Any("/apk/**", func(res http.ResponseWriter, req *http.Request) {
+		fmt.Println("/apk/")
+		fileServer.ServeHTTP(res, req)
+	})
 
 	m.Use(render.Renderer(render.Options{
 		Directory:  "templates",

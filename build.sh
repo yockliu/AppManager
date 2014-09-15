@@ -18,8 +18,8 @@ echo channelGroup + $channelGroup
 cd $projectPath
 
 git reset --hard
-git pull
-git co $gitTag
+git pull --all
+git checkout $gitTag
 
 rm $tmpgradle
 
@@ -34,7 +34,7 @@ do read || DONE=true
 		goinFlavors=true
 	fi
 	if [ $goinFlavors = true ] && [ "$REPLY" = "    }" ]; then
-		for channel in `echo "\t\t$channelGroup" | tr ',' ' '`
+		for channel in `echo "$channelGroup" | tr ',' ' '`
 		do
 			#echo $channel >> tmp.gradle
 			echo $channel | sed 's/and-//' >> $tmpgradle
@@ -49,7 +49,7 @@ mv $tmpgradle $buildgradle
 ./gradlew assembleRelease 
 
 outputSource=$projectPath/zhoumo/build/outputs/apk/
-outputDest=$SH_PATH/apk/$APP_IDENTI/$gitTag/
+outputDest=$SH_PATH/static/apk/$APP_IDENTI/$gitTag/
 echo $outputSource
 echo $outputDest
 mkdir -p $outputDest
