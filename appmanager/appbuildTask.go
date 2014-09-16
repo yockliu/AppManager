@@ -34,6 +34,12 @@ func InitAppBuildTask() {
 	taskCollection = mongodb.Mdb.C("app_build_task")
 }
 
+func AppBuildTaskList(m map[string]interface{}) ([]AppBuildTask, error) {
+	var list []AppBuildTask
+	err := taskCollection.Find(m).All(&list)
+	return list, err
+}
+
 func CreateAppBuildTask(task *AppBuildTask) (AppBuildTask, error) {
 	var newTask AppBuildTask
 	task.Id = bson.NewObjectId()
