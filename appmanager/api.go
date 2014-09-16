@@ -32,7 +32,7 @@ func RouteApi(m *martini.ClassicMartini) {
 		r.Delete("/app/:appid/channel/:id", api_channel_delete)
 
 		r.Post("/build", api_app_build)
-		r.Get("/build/status/:appid", api_app_build_status)
+		r.Get("/build/tasks", api_app_build_tasks)
 	})
 }
 
@@ -97,8 +97,25 @@ func api_app_build(params martini.Params, req *http.Request, r render.Render) {
 	r.JSON(200, "{}")
 }
 
-func api_app_build_status(params martini.Params, req *http.Request, r render.Render) {
-	r.JSON(200, "{}")
+func api_app_build_tasks(params martini.Params, req *http.Request, r render.Render) {
+	query := req.URL.Query()
+	appid := query["appid"]
+	platform := query["platform"]
+	// TODO: check query
+
+	m := bson.M{"status": bson.M{"$in": []T_ABTask_Status{T_ABTask_ST_RUNNING, T_ABTask_ST_INIT}}}
+	if len(appid) > 0 {
+		m["appid"] = appid[0]
+	}
+	if len(platform) > 0 {
+		m["platform"] = platform[0]
+	}
+	tasks, err := ReadAppBuildTaskList(m)
+	if err != nil {
+		r.JSON(500, err.Error())
+	} else {
+		r.JSON(200, tasks)
+	}
 }
 
 func api_app_list(r render.Render) {

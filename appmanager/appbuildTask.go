@@ -34,7 +34,9 @@ func InitAppBuildTask() {
 	taskCollection = mongodb.Mdb.C("app_build_task")
 }
 
-func AppBuildTaskList(m map[string]interface{}) ([]AppBuildTask, error) {
+func ReadAppBuildTaskList(m map[string]interface{}) ([]AppBuildTask, error) {
+	fmt.Println(m)
+	fmt.Println(bson.M(m))
 	var list []AppBuildTask
 	err := taskCollection.Find(m).All(&list)
 	return list, err
@@ -60,7 +62,7 @@ func ReadAppBuildTask(id bson.ObjectId) (AppBuildTask, error) {
 	return newTask, err
 }
 
-func FindAppBuildTask(m map[string]interface{}) (AppBuildTask, error) {
+func FindAppBuildTask(m bson.M) (AppBuildTask, error) {
 	var newTask AppBuildTask
 	err := taskCollection.Find(m).One(&newTask)
 	return newTask, err

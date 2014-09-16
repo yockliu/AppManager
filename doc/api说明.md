@@ -871,7 +871,7 @@ status: 204
 ####apis
 
 * [build](#anchor-build)
-* [build status](#anchor-build_status)
+* [build task list](#anchor-build_task_list)
 * [package download urls](#anchor-package_download_url)
 
 ###<a name="anchor-build" id="anchor-build">build</a>
@@ -895,6 +895,7 @@ Body
 ```
 {
 	"appid": "$appid",
+	"platform": "$platform",
 	"versionid": "$versionid",
 	"channels": [$channel_code_arrays]
 }
@@ -906,7 +907,7 @@ Body
 status: 200
 ```
 
-###<a name="anchor-build_status" id="anchor-build_status">build status</a>
+###<a name="anchor-build_task_list" id="anchor-build_task_list">build task list</a>
 
 ####Request
 
@@ -919,14 +920,14 @@ GET
 Path
 
 ```
-/api/build/status/:appid
+/api/build/tasks?appid=$appid&platform=$platform
 ```
 
 ####Response
 
 ```
 status: 200
-body: {"running":$isrunning} // isrunning = [true | false]
+body: {[tasks1, task2]}
 ```
 
 ###<a name="anchor-package_download_url" id="anchor-package_download_url">package download urls</a>
