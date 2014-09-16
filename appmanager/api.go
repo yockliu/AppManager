@@ -47,15 +47,19 @@ func api_app_build(params martini.Params, req *http.Request, r render.Render) {
 	fmt.Println(m)
 
 	appid := m["appid"]
+	platform := m["platform"]
 	versionid := m["versionid"]
 	channels := m["channels"]
-
-	//appid = "540ea615421e44d11e000001"
-	//versionid = "540ebd3e421e44d696000002"
 
 	appidst, ok := appid.(string)
 	if !ok {
 		r.JSON(500, "appid格式错误")
+		return
+	}
+
+	platformst, ok := platform.(string)
+	if !ok {
+		r.JSON(500, "platform格式错误")
 		return
 	}
 
@@ -79,13 +83,13 @@ func api_app_build(params martini.Params, req *http.Request, r render.Render) {
 		}
 	}
 
-	appBuilder, err := GetAppBuilder(appidst)
+	appBuilder, err := GetAppBuilder(appidst, platformst)
 	if err != nil {
 		r.JSON(500, err.Error())
 		return
 	}
 
-	err = appBuilder.RunBuild(appidst, versionidst, channelsar)
+	_, err = appBuilder.AddBuild(versionidst, channelsar)
 	if err != nil {
 		r.JSON(500, err.Error())
 	}
@@ -94,17 +98,7 @@ func api_app_build(params martini.Params, req *http.Request, r render.Render) {
 }
 
 func api_app_build_status(params martini.Params, req *http.Request, r render.Render) {
-	appid := params["appid"]
-
-	appBuilder, err := GetAppBuilder(appid)
-	if err != nil {
-		r.JSON(500, err.Error())
-		return
-	}
-
-	appBuilderStatus := fmt.Sprintf("{\"running\":%v}", appBuilder.IsRunning())
-
-	r.JSON(200, appBuilderStatus)
+	r.JSON(200, "{}")
 }
 
 func api_app_list(r render.Render) {

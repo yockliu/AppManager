@@ -6,21 +6,109 @@ import (
 	"gopkg.in/mgo.v2/bson"
 	"os"
 	"os/exec"
+	"sync"
 )
 
 type AppBuilder struct {
-	appid   string
-	running bool
+	appid           string
+	platform        string
+	scheduleCond    *sync.Cond
+	taskMutex       *sync.Mutex
+	scheduleLooping bool
 }
 
 var appbuilderMap map[string]*AppBuilder = make(map[string]*AppBuilder)
+var appbuilderMutex sync.Mutex = sync.Mutex{}
 
-func (ab *AppBuilder) RunBuild(appid string, versionid string, channels []string) error {
-	if ab.running {
-		return errors.New("正在打包")
+func GetAppBuilder(appid string, platform string) (*AppBuilder, error) {
+	fmt.Println("GetAppBuilder")
+	appbuilderMutex.Lock()
+	if appbuilderMap[appid] == nil {
+		app, err := ReadApp(bson.ObjectIdHex(appid))
+		if err != nil {
+			return nil, err
+		}
+		if len(app.ProjectPath) == 0 {
+			err = errors.New("App的工程未设置")
+			return nil, err
+		}
+		ab := new(AppBuilder)
+		ab.appid = appid
+		ab.platform = platform
+		locker := new(sync.Mutex)
+		ab.scheduleCond = sync.NewCond(locker)
+		ab.taskMutex = new(sync.Mutex)
+		appbuilderMap[appid] = ab
+	}
+	appbuilderMutex.Unlock()
+	return appbuilderMap[appid], nil
+}
+
+func (ab *AppBuilder) AddBuild(versionid string, channels []string) (*AppBuildTask, error) {
+	task := new(AppBuildTask)
+	task.Appid = ab.appid
+	task.Platform = ab.platform
+	task.Versionid = versionid
+	task.Channels = channels
+
+	ab.taskMutex.Lock()
+	newTask, err := CreateAppBuildTask(task)
+	ab.taskMutex.Unlock()
+
+	go ab.scheduleLoop()
+
+	return &newTask, err
+}
+
+func (ab *AppBuilder) CheckSchedule() {
+	go ab.scheduleLoop()
+}
+
+func (ab *AppBuilder) scheduleLoop() {
+	ab.scheduleCond.L.Lock()
+
+	if ab.scheduleLooping == true {
+		return
+	}
+	ab.scheduleLooping = true
+
+	for {
+		var task AppBuildTask
+		ab.taskMutex.Lock()
+
+		m := map[string]interface{}{}
+		m["status"] = T_ABTask_ST_RUNNING
+		task, err := FindAppBuildTask(m)
+		fmt.Println("appbuild schedule loop find running task")
+		fmt.Println(task)
+		if err != nil || &task == nil {
+			m["status"] = T_ABTask_ST_INIT
+			task, err = FindAppBuildTask(m)
+			fmt.Println("appbuild schedule loop find init task")
+			fmt.Println(task)
+			ab.taskMutex.Unlock()
+			if err != nil || &task == nil {
+				break
+			}
+		} else {
+			ab.taskMutex.Unlock()
+		}
+
+		ab.runBuild(&task)
 	}
 
-	app, err := ReadApp(bson.ObjectIdHex(ab.appid))
+	ab.scheduleLooping = false
+	ab.scheduleCond.L.Unlock()
+}
+
+func (ab *AppBuilder) runBuild(task *AppBuildTask) error {
+	ab.taskMutex.Lock()
+	m := make(map[string]interface{})
+	m["status"] = T_ABTask_ST_RUNNING
+	UpdateAppBuildTask(task.Id, m)
+	ab.taskMutex.Unlock()
+
+	app, err := ReadApp(bson.ObjectIdHex(task.Appid))
 	if err != nil {
 		return err
 	}
@@ -29,7 +117,7 @@ func (ab *AppBuilder) RunBuild(appid string, versionid string, channels []string
 		return err
 	}
 
-	version, err := ReadVersion(appid, bson.ObjectIdHex(versionid))
+	version, err := ReadVersion(task.Appid, bson.ObjectIdHex(task.Versionid))
 	if err != nil {
 		return err
 	}
@@ -53,9 +141,9 @@ func (ab *AppBuilder) RunBuild(appid string, versionid string, channels []string
 	fmt.Println(shcmd)
 
 	var chString string = ""
-	for i, v := range channels {
+	for i, v := range task.Channels {
 		chString += v
-		if i < len(channels) {
+		if i < len(task.Channels) {
 			chString += ","
 		}
 	}
@@ -64,30 +152,15 @@ func (ab *AppBuilder) RunBuild(appid string, versionid string, channels []string
 	cmd.Stderr = os.Stderr
 
 	fmt.Println("appbuilder cmd start")
-	ab.running = true
 	cmd.Start()
 	cmd.Wait()
-	ab.running = false
 	fmt.Println("appbuilder cmd run end")
+
+	ab.taskMutex.Lock()
+	m = make(map[string]interface{})
+	m["status"] = T_ABTask_ST_FINISH
+	UpdateAppBuildTask(task.Id, m)
+	ab.taskMutex.Unlock()
+
 	return nil
-}
-
-func (ab *AppBuilder) IsRunning() bool {
-	return ab.running
-}
-
-func GetAppBuilder(appid string) (*AppBuilder, error) {
-	fmt.Println("GetAppBuilder")
-	if appbuilderMap[appid] == nil {
-		app, err := ReadApp(bson.ObjectIdHex(appid))
-		if err != nil {
-			return nil, err
-		}
-		if len(app.ProjectPath) == 0 {
-			err = errors.New("App的工程未设置")
-			return nil, err
-		}
-		appbuilderMap[appid] = &AppBuilder{appid, false}
-	}
-	return appbuilderMap[appid], nil
 }

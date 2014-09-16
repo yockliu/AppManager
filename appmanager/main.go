@@ -9,6 +9,7 @@ import (
 
 func Init() {
 	InitApp()
+	InitAppBuildTask()
 }
 
 func RoutePage(m *martini.ClassicMartini) {
