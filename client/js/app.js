@@ -47,6 +47,10 @@ angular.module('app', [
         templateUrl: 'partials/add-channel.html',
         controller: 'UpdateChannelCtrl'
       })
+      .when('/apps/:app_id/build-packages', {
+        templateUrl: 'partials/build-packages.html',
+        controller: 'BuildPackagesCtrl'
+      })
       .otherwise({
         rediretTo: '/apps'
       })

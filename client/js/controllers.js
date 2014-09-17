@@ -207,7 +207,7 @@ angular.module('app.controllers', [])
     $scope.isUpdate = $routeParams.isUpdate
 
     $scope.platforms = angular.fromJson($routeParams.platforms)
-    
+
     Version.get({
       app_id: $routeParams.app_id,
       version_id: $routeParams.version_id
@@ -260,7 +260,7 @@ angular.module('app.controllers', [])
       }
 
       var channel = new Channel($scope.channel)
-      
+
       channel.$save({
         app_id: $routeParams.app_id
       }).then(function(data) {
@@ -312,6 +312,29 @@ angular.module('app.controllers', [])
       }).catch(function(resp) {
         console.error('修改渠道失败！')
       })
+    }
+  }
+])
+
+.controller('BuildPackagesCtrl', ['$scope', '$routeParams', 'App', 'Version', 'Channel',
+  function($scope, $routeParams, App, Version, Channel) {
+    $scope.app = App.get({app_id: $routeParams.app_id})
+
+    $scope.buildPlatform = ''
+    $scope.buildChannels = []
+
+    $scope.versions = Version.query({app_id: $routeParams.app_id})
+    $scope.channels = Channel.query({app_id: $routeParams.app_id})
+
+    $scope.build = function() {
+      var data = {
+        appid: $routeParams.app_id,
+        platform: $scope.buildPlatform,
+        versionid: $scope.buildVersion,
+        channels: $scope.buildChannels
+      }
+
+      $scope.logs = data
     }
   }
 ])
