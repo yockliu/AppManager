@@ -318,23 +318,35 @@ angular.module('app.controllers', [])
 
 .controller('BuildPackagesCtrl', ['$scope', '$routeParams', 'App', 'Version', 'Channel',
   function($scope, $routeParams, App, Version, Channel) {
-    $scope.app = App.get({app_id: $routeParams.app_id})
-
-    $scope.buildPlatform = ''
     $scope.buildChannels = []
 
-    $scope.versions = Version.query({app_id: $routeParams.app_id})
-    $scope.channels = Channel.query({app_id: $routeParams.app_id})
+    $scope.app = App.get({
+      app_id: $routeParams.app_id
+    })
+    $scope.app.$promise.then(function(app) {
+      if (app && app.platforms)
+        $scope.buildPlatform = app.platforms[0]
+    })
+
+    $scope.versions = Version.query({
+      app_id: $routeParams.app_id
+    })
+    $scope.versions.$promise.then(function(versions) {
+      if (versions && versions.length)
+        $scope.buildVersion = versions[0].id
+    })
+
+    $scope.channels = Channel.query({
+      app_id: $routeParams.app_id
+    })
 
     $scope.build = function() {
       var data = {
         appid: $routeParams.app_id,
         platform: $scope.buildPlatform,
         versionid: $scope.buildVersion,
-        channels: $scope.buildChannels
+        channels: _.compact($scope.buildChannels)
       }
-
-      $scope.logs = data
     }
   }
 ])
