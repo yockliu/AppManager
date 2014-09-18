@@ -909,6 +909,31 @@ status: 200
 
 ###<a name="anchor-build_task_list" id="anchor-build_task_list">build task list</a>
 
+
+####go struct
+
+```
+ type AppBuildTask struct {
+      Id        bson.ObjectId   `json:"id"          bson:"_id,omitempty"`
+      Appid     string          `json:"appid"       bson:"appid"`
+      Platform  string          `json:"platform"    bson:"platform"`
+      Versionid string          `json:"versionid"   bson:"versionid"`
+      Channels  []string        `json:"channels"    bson:"channels"`
+      Status    T_ABTask_Status `json:"status"      bson:"status"`
+      Created   time.Time       `json:"created"     bson:"created"`
+      Updated   time.Time       `json:"updated"     bson:"updated"`
+}
+```
+
+其中status的取值：
+
+```
+T_ABTask_ST_ERR     = -1
+T_ABTask_ST_INIT    = 1
+T_ABTask_ST_RUNNING = 2
+T_ABTask_ST_FINISH  = 3
+```
+
 ####Request
 
 Method
