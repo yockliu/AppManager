@@ -69,7 +69,8 @@ angular.module('app.controllers', [])
     $scope.update = function() {
       var app = {
         name: $scope.app.name,
-        platforms: $scope.app.platforms
+        platforms: $scope.app.platforms,
+        prj_path: $scope.app.prj_path
       }
       App.update({
         app_id: $scope.app.id
@@ -91,9 +92,19 @@ angular.module('app.controllers', [])
     $scope.app.$get({
       app_id: $routeParams.app_id
     }).then(function(data) {
-      console.log(data)
+      if (data.platforms) {
+        _.forEach(data.platforms, function(platform) {
+          $http.get('/api/build/tasks?appid' + $routeParams.app_id + '&platform=' + platform)
+            .success(function(data) {
+              console.log(platform + ' tasks: ' + angular.toJson(data))
+            })
+            .error(function(resp) {
+              console.error(resp)
+            })
+        })
+      }
     }).catch(function(resp) {
-      console.log(resp)
+      console.error(resp)
     })
 
     Version.query({
@@ -155,23 +166,6 @@ angular.module('app.controllers', [])
         })
       }
     }
-
-    $scope.packApk = function(id) {
-      var data = {
-        "appid": id,
-        "versionid": "540ebd21421e44d696000001",
-        "channels": ["and-c1", "and-f1"]
-      }
-      var responsePromise = $http.post("/api/build", data);
-
-      responsePromise.success(function(data, status, headers, config) {
-        alert("packApk success");
-      });
-      responsePromise.error(function(data, status, headers, config) {
-        alert("packApk failed!");
-      });
-    }
-
   }
 ])
 
@@ -316,8 +310,8 @@ angular.module('app.controllers', [])
   }
 ])
 
-.controller('BuildPackagesCtrl', ['$scope', '$routeParams', 'App', 'Version', 'Channel',
-  function($scope, $routeParams, App, Version, Channel) {
+.controller('BuildPackagesCtrl', ['$scope', '$routeParams', '$http', 'App', 'Version', 'Channel',
+  function($scope, $routeParams, $http, App, Version, Channel) {
     $scope.buildChannels = []
 
     $scope.app = App.get({
@@ -347,6 +341,13 @@ angular.module('app.controllers', [])
         versionid: $scope.buildVersion,
         channels: _.compact($scope.buildChannels)
       }
+
+      $http.post('/api/build', data).success(function(data) {
+        location.href = '#/apps/' + $routeParams.app_id
+      }).error(function(resp) {
+        console.error(resp)
+        alert('打包失败！')
+      })
     }
   }
 ])
