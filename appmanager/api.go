@@ -103,7 +103,7 @@ func api_app_build_tasks(params martini.Params, req *http.Request, r render.Rend
 	platform := query["platform"]
 	// TODO: check query
 
-	m := bson.M{"status": bson.M{"$in": []T_ABTask_Status{T_ABTask_ST_RUNNING, T_ABTask_ST_INIT}}}
+	// m := bson.M{"status": bson.M{"$in": []T_ABTask_Status{T_ABTask_ST_RUNNING, T_ABTask_ST_INIT}}}
 	if len(appid) > 0 {
 		m["appid"] = appid[0]
 	}
