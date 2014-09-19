@@ -124,3 +124,8 @@ body {
 .ion-social-android {
   /*color: green;*/
 }
+
+.icon-arrow {
+  font-weight: bold;
+  font-size: 16px;
+}

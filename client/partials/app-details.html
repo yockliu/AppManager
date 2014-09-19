@@ -36,7 +36,7 @@
     <td>
       <a href="#/apps/{{app.id}}/add-version?platforms={{app.platforms}}">添加版本</a>
       <hr data-ng-show="versions">
-      <table class="table table-hover" data-ng-show ="versions">
+      <table class="table table-hover" data-ng-show ="versions" data-ng-init="foldVersion = true">
         <thead>
           <tr>
             <th>ID</th>
@@ -51,7 +51,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr data-ng-repeat="version in versions"> 
+          <tr data-ng-repeat="version in versions" data-ng-show="$first || !foldVersion"> 
             <td>{{version.id | limitTo : HASH_LENGTH_DEFAULT}}</td>
             <td>{{version.code}}</td>
             <td>{{version.name}}</td>
@@ -69,6 +69,12 @@
               <a data-ng-click="deleteVersion(version.id, $index)">删除<a>
             </td>
           </tr>
+          <tr>
+            <td colspan="9" data-ng-show="versions.length > 1" data-ng-click="foldVersion = foldVersion ? false : true;" style="text-align:center;">
+              <i class="icon-arrow" data-ng-class="foldVersion ?  'ion-chevron-down' : 'ion-chevron-up'"></i>
+              <span>{{foldVersion ? '展开' : '折叠'}} &nbsp;</span>
+            </td>
+          </tr>
         </tbody>
       </table>
     </td>
@@ -78,7 +84,7 @@
     <td>
       <a href="#/apps/{{app.id}}/add-channel?platforms={{app.platforms}}">添加渠道</a>
       <hr data-ng-show ="channels">
-      <table class="table table-hover" data-ng-show ="channels">
+      <table class="table table-hover" data-ng-show ="channels" data-ng-init="foldChannel = true">
         <thead>
           <tr>
             <th>ID</th>
@@ -91,7 +97,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr data-ng-repeat="channel in channels">
+          <tr data-ng-repeat="channel in channels" data-ng-show="$first || !foldChannel">
             <td>{{channel.id | limitTo : HASH_LENGTH_DEFAULT}}</td>
             <td>{{channel.code}}</td>
             <td>{{channel.name}}</td>
@@ -105,6 +111,12 @@
             <td class="app-actions">
               <a href="#/apps/{{app.id}}/update-channel/{{channel.id}}?platforms={{app.platforms}}&isUpdate=true">修改<a> | 
               <a data-ng-click="deleteChannel(channel.id, $index)">删除<a>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="9" data-ng-show="versions.length > 1" data-ng-click="foldChannel = foldChannel ? false : true;" style="text-align:center;">
+              <i class="icon-arrow" data-ng-class="foldChannel ?  'ion-chevron-down' : 'ion-chevron-up'"></i>
+              <span>{{foldChannel ? '展开' : '折叠'}} &nbsp;</span>
             </td>
           </tr>
         </tbody>
