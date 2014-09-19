@@ -66,7 +66,7 @@
             <td>{{version.updated | date : DATE_DEFAULT}}</td>
             <td class="app-actions">
               <a href="#/apps/{{app.id}}/update-version/{{version.id}}?platforms={{app.platforms}}&isUpdate=true">修改<a> | 
-              <a data-ng-click="deleteVersion(version.id, $index)">删除<a>
+              <a href="javascript:;" data-ng-click="deleteVersion(version.id, $index)">删除<a>
             </td>
           </tr>
           <tr>
@@ -110,7 +110,7 @@
             <td>{{channel.updated | date : DATE_DEFAULT}}</td>
             <td class="app-actions">
               <a href="#/apps/{{app.id}}/update-channel/{{channel.id}}?platforms={{app.platforms}}&isUpdate=true">修改<a> | 
-              <a data-ng-click="deleteChannel(channel.id, $index)">删除<a>
+              <a href="javascript:;" data-ng-click="deleteChannel(channel.id, $index)">删除<a>
             </td>
           </tr>
           <tr>
