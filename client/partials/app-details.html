@@ -55,7 +55,11 @@
             <td>{{version.id | limitTo : HASH_LENGTH_DEFAULT}}</td>
             <td>{{version.code}}</td>
             <td>{{version.name}}</td>
-            <td>{{version.platform}}</td>
+            <td>
+              <i class="icon ion-social-android" data-ng-show="version.platform === 'android'"></i>
+              <!-- {{version.platform}} -->
+              <i class="icon ion-social-apple" data-ng-show="version.platform === 'ios'"></i>
+            </td>
             <td>{{version.git_index | limitTo : HASH_LENGTH_DEFAULT}}</td>
             <td>{{version.git_tag}}</td>
             <td>{{version.created | date : DATE_DEFAULT}}</td>
@@ -91,7 +95,11 @@
             <td>{{channel.id | limitTo : HASH_LENGTH_DEFAULT}}</td>
             <td>{{channel.code}}</td>
             <td>{{channel.name}}</td>
-            <td>{{channel.platform}}</td>
+            <td>
+              <i class="icon ion-social-android" data-ng-show="channel.platform === 'android'"></i>
+              <!-- {{channel.platform}} -->
+              <i class="icon ion-social-apple" data-ng-show="channel.platform === 'ios'"></i>
+            </td>
             <td>{{channel.created | date : DATE_DEFAULT}}</td>
             <td>{{channel.updated | date : DATE_DEFAULT}}</td>
             <td class="app-actions">
