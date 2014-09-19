@@ -35,8 +35,8 @@
     <td>VERSION</td>
     <td>
       <a href="#/apps/{{app.id}}/add-version?platforms={{app.platforms}}">添加版本</a>
-      <hr data-ng-show="versions">
-      <table class="table table-hover" data-ng-show ="versions" data-ng-init="foldVersion = true">
+      <hr data-ng-show="versions && versions.length > 0">
+      <table class="table table-hover" data-ng-show="versions && versions.length > 0" data-ng-init="foldVersion = true">
         <thead>
           <tr>
             <th>ID</th>
@@ -83,8 +83,8 @@
     <td>CHANNEL</td>
     <td>
       <a href="#/apps/{{app.id}}/add-channel?platforms={{app.platforms}}">添加渠道</a>
-      <hr data-ng-show ="channels">
-      <table class="table table-hover" data-ng-show ="channels" data-ng-init="foldChannel = true">
+      <hr data-ng-show ="channels && channels.length > 0">
+      <table class="table table-hover" data-ng-show ="channels && channels.length > 0" data-ng-init="foldChannel = true">
         <thead>
           <tr>
             <th>ID</th>
