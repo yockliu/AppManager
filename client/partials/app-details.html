@@ -123,6 +123,116 @@
       </table>
     </td>
   </tr>
+  <tr>
+    <td>
+      BUILD
+    </td>
+    <td>
+      <div>ANDROID TASKS</div>
+      <hr>
+      <table class="table table-hover" data-ng-init="foldAndroidTasks = true">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>APP ID</th>
+            <th>VERSION ID</th>
+            <th>PLATFORM</th>
+            <th>CHANNELS</th>
+            <th>STATUS</th>
+            <th>CREATED</th>
+            <th>UPDATED</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-ng-repeat="task in android_tasks" data-ng-show="$first || !foldAndroidTasks">
+            <td>{{task.id | limitTo : HASH_LENGTH_DEFAULT}}</td>
+            <td>{{task.appid | limitTo : HASH_LENGTH_DEFAULT}}</td>
+            <td>{{task.versionid | limitTo : HASH_LENGTH_DEFAULT}}</td>
+            <td>{{task.platform}}</td>
+            <td>
+              <!-- {{task.channels}} -->
+              <span data-ng-repeat="channel in task.channels">{{channel}} &nbsp;</span>
+            </td>
+            <td>
+              <span data-ng-show="task.status === -1">错误</span>
+              <span data-ng-show="task.status === 1">初始化...</span>
+              <span data-ng-show="task.status === 2">打包中...</span>
+              <span data-ng-show="task.status === 3">完成</span>
+            </td>
+            <td>{{task.created | date : DATE_DEFAULT}}</td>
+            <td>{{task.updated | date : DATE_DEFAULT}}</td>
+          </tr>
+          <tr>
+            <td colspan="9" data-ng-show="android_tasks.length > 1" data-ng-click="foldAndroidTasks = foldAndroidTasks ? false : true;" style="text-align:center;">
+              <i class="icon-arrow" data-ng-class="foldAndroidTasks ?  'ion-chevron-down' : 'ion-chevron-up'"></i>
+              <span>{{foldAndroidTasks ? '展开' : '折叠'}} &nbsp;</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div>IOS TASKS</div>
+      <hr>
+      <table class="table table-hover" data-ng-init="foldIOSTasks = true">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>APP ID</th>
+            <th>VERSION ID</th>
+            <th>PLATFORM</th>
+            <th>CHANNELS</th>
+            <th>STATUS</th>
+            <th>CREATED</th>
+            <th>UPDATED</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-ng-repeat="task in ios_tasks" data-ng-show="$first || !foldIOSTasks">
+            <td>{{task.id | limitTo : HASH_LENGTH_DEFAULT}}</td>
+            <td>{{task.appid | limitTo : HASH_LENGTH_DEFAULT}}</td>
+            <td>{{task.versionid | limitTo : HASH_LENGTH_DEFAULT}}</td>
+            <td>{{task.platform}}</td>
+            <td>
+              <!-- {{task.channels}} -->
+              <span data-ng-repeat="channel in task.channels">{{channel}} &nbsp;</span>
+            </td>
+            <td>
+              <span data-ng-show="task.status === -1">错误</span>
+              <span data-ng-show="task.status === 1">初始化...</span>
+              <span data-ng-show="task.status === 2">打包中...</span>
+              <span data-ng-show="task.status === 3">完成</span>
+            </td>
+            <td>{{task.created | date : DATE_DEFAULT}}</td>
+            <td>{{task.updated | date : DATE_DEFAULT}}</td>
+          </tr>
+          <tr>
+            <td colspan="9" data-ng-show="ios_tasks.length > 1" data-ng-click="foldIOSTasks = foldIOSTasks ? false : true;" style="text-align:center;">
+              <i class="icon-arrow" data-ng-class="foldIOSTasks ?  'ion-chevron-down' : 'ion-chevron-up'"></i>
+              <span>{{foldIOSTasks ? '展开' : '折叠'}} &nbsp;</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+  <!-- 
+  {
+    "id": "541a58e962b05b1ef900000d",
+    "appid": "54129b1f62b05b4eed000012",
+    "platform": "android",
+    "versionid": "541a569162b05b1ef9000004",
+    "channels": [
+      "c2",
+      "c3",
+      "d4",
+      "f3",
+      "f5",
+      "f8"
+    ],
+    "status": 3,
+    "created": "2014-09-18T12:00:41.825+08:00",
+    "updated": "2014-09-18T12:00:48.488+08:00"
+  } -->
 </table>
 <div style="text-align:center;">
   <a class="btn btn-success btn-longer" href="#/apps/{{app.id}}/build-packages">打包</a>
