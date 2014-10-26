@@ -1,11 +1,14 @@
 package appmanager
 
 import (
+	"archive/zip"
 	"errors"
 	"fmt"
 	"gopkg.in/mgo.v2/bson"
+	"io/ioutil"
 	"os"
 	"os/exec"
+	"strings"
 	"sync"
 )
 
@@ -156,11 +159,59 @@ func (ab *AppBuilder) runBuild(task *AppBuildTask) error {
 	cmd.Wait()
 	fmt.Println("appbuilder cmd run end")
 
+	workPath, _ := os.Getwd()
+	sourceDir := workPath + "/static/apk/" + app.Name + app.Id.Hex() + "/" + version.GitTag + "/"
+	destFile := workPath + "/static/apk/zip/" + task.Id.Hex() + ".zip"
+	var countOfChannels = len(task.Channels)
+	var sourceFileNames = make([]string, countOfChannels)
+	for i, v := range task.Channels { //zhoumo-a1-release.apk
+		sourceFileNames[i] = "zhoumo-" + strings.Replace(v, "and-", "", 1) + "-release.apk"
+	}
+	zipResult := zipFiles(sourceDir, sourceFileNames, destFile)
+
 	ab.taskMutex.Lock()
 	m = make(map[string]interface{})
-	m["status"] = T_ABTask_ST_FINISH
+	if !zipResult {
+		m["status"] = T_ABTask_ST_ERR
+	} else {
+		m["status"] = T_ABTask_ST_FINISH
+		m["file"] = "/apk/zip/" + task.Id.Hex() + ".zip"
+	}
 	UpdateAppBuildTask(task.Id, m)
 	ab.taskMutex.Unlock()
 
 	return nil
+}
+
+func zipFiles(dir string, sourceNames []string, to string) bool {
+	zipfile, err := os.Create(to)
+	if err != nil {
+		return false
+	}
+	defer zipfile.Close()
+
+	zipw := zip.NewWriter(zipfile)
+	for _, filename := range sourceNames {
+		fmt.Println(dir + filename)
+		fmt.Println("...")
+		file, err := os.Open(dir + filename)
+		if err != nil {
+			return false
+		}
+		defer file.Close()
+		bytes, err := ioutil.ReadAll(file)
+		if err != nil {
+			return false
+		}
+		zipF, err := zipw.Create(filename)
+		if err != nil {
+			return false
+		}
+		_, err = zipF.Write([]byte(bytes))
+		if err != nil {
+			return false
+		}
+	}
+	defer zipw.Close()
+	return true
 }

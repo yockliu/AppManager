@@ -23,6 +23,7 @@ type AppBuildTask struct {
 	Platform  string          `json:"platform"    bson:"platform"`
 	Versionid string          `json:"versionid"   bson:"versionid"`
 	Channels  []string        `json:"channels"    bson:"channels"`
+	File      string          `json:"file"        bson:"file"`
 	Status    T_ABTask_Status `json:"status"      bson:"status"`
 	Created   time.Time       `json:"created"     bson:"created"`
 	Updated   time.Time       `json:"updated"     bson:"updated"`

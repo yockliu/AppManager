@@ -27,3 +27,5 @@ _testmain.go
 npm-debug.log
 
 *.DS_Store
+
+/static

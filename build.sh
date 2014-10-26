@@ -46,6 +46,7 @@ done < $buildgradle
 
 mv $tmpgradle $buildgradle
 
+./gradlew clean
 ./gradlew assembleRelease 
 
 outputSource=$projectPath/zhoumo/build/outputs/apk/
