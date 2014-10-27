@@ -5,6 +5,10 @@
 >Created at: 2014.9.5
 >
 >Updated at: 2014.9.9
+>
+>revision:
+>
+>* 2014.10.27 09:31 Task增加了zip文件下载地址的字段
 
 ---
 
@@ -919,6 +923,7 @@ status: 200
       Platform  string          `json:"platform"    bson:"platform"`
       Versionid string          `json:"versionid"   bson:"versionid"`
       Channels  []string        `json:"channels"    bson:"channels"`
+      File      string          `json:"file"        bson:"file"`
       Status    T_ABTask_Status `json:"status"      bson:"status"`
       Created   time.Time       `json:"created"     bson:"created"`
       Updated   time.Time       `json:"updated"     bson:"updated"`
