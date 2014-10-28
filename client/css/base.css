@@ -129,3 +129,11 @@ body {
   font-weight: bold;
   font-size: 16px;
 }
+
+.text-error {
+  color: red;
+}
+
+.text-success {
+  color: green;
+}

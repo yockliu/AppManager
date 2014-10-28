@@ -94,7 +94,8 @@ angular.module('app.controllers', [])
     }).then(function(data) {
       if (data.platforms) {
         _.forEach(data.platforms, function(platform) {
-          $http.get('/api/build/tasks?appid' + $routeParams.app_id + '&platform=' + platform)
+          var taskUrl = '/api/build/tasks?appid=' + $routeParams.app_id + '&platform=' + platform
+          $http.get(taskUrl)
             .success(function(data) {
               if (platform === 'android')
                 $scope.android_tasks = data
