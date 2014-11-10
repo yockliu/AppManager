@@ -1,30 +1,23 @@
-# install Go
+# App 项目管理程序
 
-安装可以去[官网][1]下载对应的 package 或者使用 brew 直接在 command line 里进行安装配置，这里介绍 brew 安装方式。
+## 功能
 
-## Step 1: ``vi .zshrc``
+* 项目版本管理
+* 渠道管理
+* 打包
 
-```
-# for golang
-# mkdir $HOME/go
-# mkdir -p $GOPATH/src/github.com/user
-export GOPATH=$HOME/go
-export PATH=$PATH:$GOPATH/bin
-```
+## 部署
 
-记得 ``source .zshrc``！
+### 环境
 
-## Step 2: install & configuration
+* golang
+* mongodb
+* android sdk (Android打包)
 
-```
-brew install go
-mkdir $HOME/go
-mkdir -p $GOPATH/src/github.com/user
-```
+### 依赖
 
-### 参考
-
-[install go (in OS X)][2]
-
-[1]: http://golang.org/doc/install
-[2]: https://gist.github.com/fyears/5607418
+* go get github.com/go-martini/martini
+* go get github.com/martini-contrib/auth
+* go get github.com/martini-contrib/binding
+* go get github.com/martini-contrib/render
+* go get gopkg.in/mgo.v2
