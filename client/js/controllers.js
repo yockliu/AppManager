@@ -86,6 +86,10 @@ angular.module('app.controllers', [])
 
 .controller('AppDetailsCtrl', ['$scope', '$routeParams', '$http', 'App', 'Version', 'Channel',
   function($scope, $routeParams, $http, App, Version, Channel) {
+    // init variables
+    $scope.android_tasks = []
+    $scope.ios_tasks = []
+
     $scope.app = new App({
       id: $routeParams.app_id
     })
@@ -97,6 +101,10 @@ angular.module('app.controllers', [])
           var taskUrl = '/api/build/tasks?appid=' + $routeParams.app_id + '&platform=' + platform
           $http.get(taskUrl)
             .success(function(data) {
+              if (!data || !(data instanceof Array)) return
+              if (data.length > 1)
+                data = data.reverse()
+
               if (platform === 'android')
                 $scope.android_tasks = data
               else if (platform === 'ios')

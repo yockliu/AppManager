@@ -144,7 +144,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr data-ng-repeat="task in android_tasks.reverse() track by $index" data-ng-show="$last || !foldAndroidTasks">
+          <tr data-ng-repeat="task in android_tasks track by $index" data-ng-show="$first || !foldAndroidTasks">
             <td>{{task.id | limitTo : HASH_LENGTH_DEFAULT}}</td>
             <td>{{task.appid | limitTo : HASH_LENGTH_DEFAULT}}</td>
             <td>{{task.versionid | limitTo : HASH_LENGTH_DEFAULT}}</td>
@@ -190,7 +190,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr data-ng-repeat="task in ios_tasks.reverse() track by $index" data-ng-show="$last || !foldIOSTasks">
+          <tr data-ng-repeat="task in ios_tasks track by $index" data-ng-show="$first || !foldIOSTasks">
             <td>{{task.id | limitTo : HASH_LENGTH_DEFAULT}}</td>
             <td>{{task.appid | limitTo : HASH_LENGTH_DEFAULT}}</td>
             <td>{{task.versionid | limitTo : HASH_LENGTH_DEFAULT}}</td>
