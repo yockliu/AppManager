@@ -97,7 +97,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr data-ng-repeat="channel in channels" data-ng-show="$first || !foldChannel">
+          <tr data-ng-repeat="channel in channels track by $index" data-ng-show="$first || !foldChannel">
             <td>{{channel.id | limitTo : HASH_LENGTH_DEFAULT}}</td>
             <td>{{channel.code}}</td>
             <td>{{channel.name}}</td>
@@ -114,7 +114,7 @@
             </td>
           </tr>
           <tr>
-            <td colspan="9" data-ng-show="versions.length > 1" data-ng-click="foldChannel = foldChannel ? false : true;" style="text-align:center;">
+            <td colspan="9" data-ng-show="channels.length > 1" data-ng-click="foldChannel = foldChannel ? false : true;" style="text-align:center;">
               <i class="icon-arrow" data-ng-class="foldChannel ?  'ion-chevron-down' : 'ion-chevron-up'"></i>
               <span>{{foldChannel ? '展开' : '折叠'}} &nbsp;</span>
             </td>
